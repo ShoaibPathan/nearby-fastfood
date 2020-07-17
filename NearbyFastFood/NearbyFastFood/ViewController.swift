@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import CoreLocation
 
 class ViewController: UIViewController {
     
@@ -15,7 +16,9 @@ class ViewController: UIViewController {
         print("ViewController memory being reclaimed...")
     }
     
-    let defaults = UserDefaults.standard
+    private let defaults = UserDefaults.standard
+    private let locationManager = CLLocationManager()
+    private let initialSpanInMeters: Double = 1000
     
     let segmentedControl: UISegmentedControl = {
         let sc = UISegmentedControl(items: ["Map", "List"])
@@ -65,8 +68,10 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        mapView.delegate = self
         setupViews()
         loadLastSelectedSegmentIndex()
+        checkLocationServices()
     }
     
     //MARK: - Setup
@@ -96,3 +101,81 @@ class ViewController: UIViewController {
 
 }
 
+//MARK: - CLLocationManagerDelegate
+
+extension ViewController: CLLocationManagerDelegate {
+    
+    private func setupLocationManager() {
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+    }
+    
+    private func checkLocationServices() {
+        if CLLocationManager.locationServicesEnabled() {
+            setupLocationManager()
+            checkLocationAuthorization()
+        } else {
+            // ALERT: "Turn on Location Services"
+            AlertService.showLocationServicesOffAlert(on: self)
+        }
+    }
+    
+    private func centerViewOnDefaultLocation() {
+        let defaultLocation = CLLocationCoordinate2D(latitude: 40.758896, longitude: -73.985130)
+        let region = MKCoordinateRegion.init(center: defaultLocation, latitudinalMeters: initialSpanInMeters, longitudinalMeters: initialSpanInMeters)
+        mapView.setRegion(region, animated: true)
+    }
+    
+    private func centerViewOnUserLocation() {
+        if let location = locationManager.location?.coordinate {
+            let region = MKCoordinateRegion.init(center: location, latitudinalMeters: initialSpanInMeters, longitudinalMeters: initialSpanInMeters)
+            mapView.setRegion(region, animated: true)
+        }
+    }
+    
+//    Initial center: user location or default location provided
+    
+    private func checkLocationAuthorization() {
+        switch CLLocationManager.authorizationStatus() {
+        case .authorizedWhenInUse, .authorizedAlways:
+            
+            mapView.showsUserLocation = true
+            centerViewOnUserLocation()
+            locationManager.startUpdatingLocation()
+
+            break
+            
+        case .notDetermined:
+            // Request permission to use location services
+            locationManager.requestWhenInUseAuthorization()
+        case .denied, .restricted:
+            // ALERT: "Turn on Location Services"
+            AlertService.showLocationServicesOffAlert(on: self)
+            centerViewOnDefaultLocation()
+        @unknown default:
+            fatalError("CLAuthorizationStatus is unknown.")
+        }
+    }
+
+    //MARK: - Delegate Methods
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let location = locations.last else { return }
+        let center = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+        let region = MKCoordinateRegion.init(center: center, latitudinalMeters: initialSpanInMeters, longitudinalMeters: initialSpanInMeters)
+        mapView.setRegion(region, animated: true)
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        checkLocationAuthorization()
+    }
+    
+}
+
+//MARK: - MKMapViewDelegate
+
+extension ViewController: MKMapViewDelegate {
+    
+    
+    
+}
