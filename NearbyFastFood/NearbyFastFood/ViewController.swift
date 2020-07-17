@@ -11,6 +11,12 @@ import MapKit
 
 class ViewController: UIViewController {
     
+    deinit {
+        print("ViewController memory being reclaimed...")
+    }
+    
+    let defaults = UserDefaults.standard
+    
     let segmentedControl: UISegmentedControl = {
         let sc = UISegmentedControl(items: ["Map", "List"])
         sc.backgroundColor = #colorLiteral(red: 0.8784313725, green: 0.8823529412, blue: 0.8862745098, alpha: 1)
@@ -41,12 +47,29 @@ class ViewController: UIViewController {
             mapView.alpha = 0
             tableView.alpha = 1
         }
+        
+        saveSelectedSegmentIndex(sender.selectedSegmentIndex)
     }
+    
+    //MARK: - UserDefaults
+    
+    private func saveSelectedSegmentIndex(_ index: Int) {
+        defaults.set(index, forKey: K.UserDefaults.selectedSegmentIndex)
+    }
+    
+    private func loadLastSelectedSegmentIndex() {
+        segmentedControl.selectedSegmentIndex = defaults.integer(forKey: K.UserDefaults.selectedSegmentIndex)
+    }
+    
+    //MARK: - Lifecycles
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
+        loadLastSelectedSegmentIndex()
     }
+    
+    //MARK: - Setup
     
     private func setupViews() {
         view.backgroundColor = .white

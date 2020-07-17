@@ -14,6 +14,7 @@
 		9E24286D24C1E24900E663FC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E24286C24C1E24900E663FC /* Assets.xcassets */; };
 		9E24287024C1E24900E663FC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E24286E24C1E24900E663FC /* LaunchScreen.storyboard */; };
 		9E24287824C1E65200E663FC /* UIView + Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E24287724C1E65200E663FC /* UIView + Layout.swift */; };
+		9E24287A24C1FB1E00E663FC /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E24287924C1FB1E00E663FC /* Constants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		9E24286F24C1E24900E663FC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9E24287124C1E24900E663FC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9E24287724C1E65200E663FC /* UIView + Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView + Layout.swift"; sourceTree = "<group>"; };
+		9E24287924C1FB1E00E663FC /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +68,7 @@
 				9E24286E24C1E24900E663FC /* LaunchScreen.storyboard */,
 				9E24287124C1E24900E663FC /* Info.plist */,
 				9E24287724C1E65200E663FC /* UIView + Layout.swift */,
+				9E24287924C1FB1E00E663FC /* Constants.swift */,
 			);
 			path = NearbyFastFood;
 			sourceTree = "<group>";
@@ -141,6 +144,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E24287A24C1FB1E00E663FC /* Constants.swift in Sources */,
 				9E24286824C1E24500E663FC /* ViewController.swift in Sources */,
 				9E24286424C1E24500E663FC /* AppDelegate.swift in Sources */,
 				9E24287824C1E65200E663FC /* UIView + Layout.swift in Sources */,
