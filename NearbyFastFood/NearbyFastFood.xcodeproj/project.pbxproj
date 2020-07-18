@@ -3,10 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5535BEBF424955B3DC465A17 /* Pods_NearbyFastFood.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B4D80C0F040CA0AF9BD3618 /* Pods_NearbyFastFood.framework */; };
 		9E24286424C1E24500E663FC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E24286324C1E24500E663FC /* AppDelegate.swift */; };
 		9E24286624C1E24500E663FC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E24286524C1E24500E663FC /* SceneDelegate.swift */; };
 		9E24286824C1E24500E663FC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E24286724C1E24500E663FC /* ViewController.swift */; };
@@ -16,9 +17,15 @@
 		9E24287824C1E65200E663FC /* UIView + Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E24287724C1E65200E663FC /* UIView + Layout.swift */; };
 		9E24287A24C1FB1E00E663FC /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E24287924C1FB1E00E663FC /* Constants.swift */; };
 		9E24287C24C201FD00E663FC /* AlertService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E24287B24C201FD00E663FC /* AlertService.swift */; };
+		9E80024524C24AFC001A46E3 /* RequestInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E80024424C24AFC001A46E3 /* RequestInterceptor.swift */; };
+		9E80024824C268FF001A46E3 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E80024724C268FF001A46E3 /* APIService.swift */; };
+		9E80024B24C28DD6001A46E3 /* Business.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E80024A24C28DD6001A46E3 /* Business.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		624FB5DAB4B228C94AF1D2EE /* Pods-NearbyFastFood.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearbyFastFood.debug.xcconfig"; path = "Target Support Files/Pods-NearbyFastFood/Pods-NearbyFastFood.debug.xcconfig"; sourceTree = "<group>"; };
+		9B4D80C0F040CA0AF9BD3618 /* Pods_NearbyFastFood.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NearbyFastFood.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9CB4DBC1FBE2F35BC82EDDA8 /* Pods-NearbyFastFood.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearbyFastFood.release.xcconfig"; path = "Target Support Files/Pods-NearbyFastFood/Pods-NearbyFastFood.release.xcconfig"; sourceTree = "<group>"; };
 		9E24286024C1E24500E663FC /* NearbyFastFood.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NearbyFastFood.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E24286324C1E24500E663FC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9E24286524C1E24500E663FC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -30,6 +37,9 @@
 		9E24287724C1E65200E663FC /* UIView + Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView + Layout.swift"; sourceTree = "<group>"; };
 		9E24287924C1FB1E00E663FC /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		9E24287B24C201FD00E663FC /* AlertService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertService.swift; sourceTree = "<group>"; };
+		9E80024424C24AFC001A46E3 /* RequestInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestInterceptor.swift; sourceTree = "<group>"; };
+		9E80024724C268FF001A46E3 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
+		9E80024A24C28DD6001A46E3 /* Business.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Business.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,17 +47,28 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5535BEBF424955B3DC465A17 /* Pods_NearbyFastFood.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1E4C1242005AACC3296C977B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9B4D80C0F040CA0AF9BD3618 /* Pods_NearbyFastFood.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		9E24285724C1E24500E663FC = {
 			isa = PBXGroup;
 			children = (
 				9E24286224C1E24500E663FC /* NearbyFastFood */,
 				9E24286124C1E24500E663FC /* Products */,
+				ACF06869AD2FF93F9B721D3D /* Pods */,
+				1E4C1242005AACC3296C977B /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -70,8 +91,10 @@
 				9E24286E24C1E24900E663FC /* LaunchScreen.storyboard */,
 				9E24287124C1E24900E663FC /* Info.plist */,
 				9E24287724C1E65200E663FC /* UIView + Layout.swift */,
-				9E24287924C1FB1E00E663FC /* Constants.swift */,
+				9E80024924C289A8001A46E3 /* Constants */,
 				9E24287D24C202EF00E663FC /* Services */,
+				9E80024624C24C93001A46E3 /* Alamofire */,
+				9E80024C24C28DDB001A46E3 /* Model */,
 			);
 			path = NearbyFastFood;
 			sourceTree = "<group>";
@@ -84,6 +107,40 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
+		9E80024624C24C93001A46E3 /* Alamofire */ = {
+			isa = PBXGroup;
+			children = (
+				9E80024724C268FF001A46E3 /* APIService.swift */,
+				9E80024424C24AFC001A46E3 /* RequestInterceptor.swift */,
+			);
+			path = Alamofire;
+			sourceTree = "<group>";
+		};
+		9E80024924C289A8001A46E3 /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				9E24287924C1FB1E00E663FC /* Constants.swift */,
+			);
+			path = Constants;
+			sourceTree = "<group>";
+		};
+		9E80024C24C28DDB001A46E3 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				9E80024A24C28DD6001A46E3 /* Business.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		ACF06869AD2FF93F9B721D3D /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				624FB5DAB4B228C94AF1D2EE /* Pods-NearbyFastFood.debug.xcconfig */,
+				9CB4DBC1FBE2F35BC82EDDA8 /* Pods-NearbyFastFood.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -91,9 +148,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9E24287424C1E24900E663FC /* Build configuration list for PBXNativeTarget "NearbyFastFood" */;
 			buildPhases = (
+				BF59A8C6DC0FCC61CDF688E8 /* [CP] Check Pods Manifest.lock */,
 				9E24285C24C1E24500E663FC /* Sources */,
 				9E24285D24C1E24500E663FC /* Frameworks */,
 				9E24285E24C1E24500E663FC /* Resources */,
+				F49E510B227BE8B8C17F1CDE /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -150,16 +209,61 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		BF59A8C6DC0FCC61CDF688E8 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-NearbyFastFood-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F49E510B227BE8B8C17F1CDE /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-NearbyFastFood/Pods-NearbyFastFood-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-NearbyFastFood/Pods-NearbyFastFood-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NearbyFastFood/Pods-NearbyFastFood-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		9E24285C24C1E24500E663FC /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				9E24287A24C1FB1E00E663FC /* Constants.swift in Sources */,
+				9E80024524C24AFC001A46E3 /* RequestInterceptor.swift in Sources */,
 				9E24286824C1E24500E663FC /* ViewController.swift in Sources */,
 				9E24286424C1E24500E663FC /* AppDelegate.swift in Sources */,
 				9E24287824C1E65200E663FC /* UIView + Layout.swift in Sources */,
 				9E24287C24C201FD00E663FC /* AlertService.swift in Sources */,
+				9E80024B24C28DD6001A46E3 /* Business.swift in Sources */,
+				9E80024824C268FF001A46E3 /* APIService.swift in Sources */,
 				9E24286624C1E24500E663FC /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -302,6 +406,7 @@
 		};
 		9E24287524C1E24900E663FC /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 624FB5DAB4B228C94AF1D2EE /* Pods-NearbyFastFood.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -320,6 +425,7 @@
 		};
 		9E24287624C1E24900E663FC /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9CB4DBC1FBE2F35BC82EDDA8 /* Pods-NearbyFastFood.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;

@@ -9,6 +9,7 @@
 import UIKit
 import MapKit
 import CoreLocation
+import Alamofire
 
 class ViewController: UIViewController {
     
@@ -133,8 +134,6 @@ extension ViewController: CLLocationManagerDelegate {
         }
     }
     
-//    Initial center: user location or default location provided
-    
     private func checkLocationAuthorization() {
         switch CLLocationManager.authorizationStatus() {
         case .authorizedWhenInUse, .authorizedAlways:
@@ -142,8 +141,32 @@ extension ViewController: CLLocationManagerDelegate {
             mapView.showsUserLocation = true
             centerViewOnUserLocation()
             locationManager.startUpdatingLocation()
+            
+            
+            
+            
+            
+            
+            
+            guard let location = locationManager.location?.coordinate else { return }
+            let lat = location.latitude
+            let lon = location.longitude
 
-            break
+            
+            APIService.shared.fetchBusinesses(latitude: lat, longitude: lon, radius: initialSpanInMeters, sortBy: "distance", categories: "hotdogs") { (businesses) in
+                businesses.forEach { (business) in
+                    print(business.name)
+                }
+            }
+            
+            
+            
+            
+            
+            
+            
+
+            
             
         case .notDetermined:
             // Request permission to use location services
@@ -179,3 +202,5 @@ extension ViewController: MKMapViewDelegate {
     
     
 }
+    
+
