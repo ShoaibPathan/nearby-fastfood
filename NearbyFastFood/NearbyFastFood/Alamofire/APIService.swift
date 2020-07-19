@@ -24,8 +24,8 @@ public class APIService {
     func fetchBusinesses(latitude: Double,
                          longitude: Double,
                          radius: Double,
-                         sortBy: String, // sort by distance
-                         categories: String, // "burgers,pizza,mexican,chinese,hotdogs"
+                         sortBy: String,
+                         categories: String,
                          completion: @escaping ([Business]) -> Void) {
         
         let parameters: [String : Any] = [
@@ -36,7 +36,6 @@ public class APIService {
             "categories": categories]
         
         let headers: HTTPHeaders = [.authorization(bearerToken: apiKey)]
-        
         
         AF.request(baseURL, parameters: parameters, headers: headers).validate().responseData { (dataResponse) in
             switch dataResponse.result {

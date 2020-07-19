@@ -17,6 +17,8 @@ class ViewController: UIViewController {
         print("ViewController memory being reclaimed...")
     }
     
+    var businesses = [Business]()
+    
     private let defaults = UserDefaults.standard
     private let locationManager = CLLocationManager()
     private let initialSpanInMeters: Double = 1000
@@ -42,9 +44,9 @@ class ViewController: UIViewController {
         return table
     }()
     
-    @objc func handleSegmentChange(_ sender: UISegmentedControl) {
+    @objc func handleSegmentChange() {
         
-        if sender.selectedSegmentIndex == 0 {
+        if segmentedControl.selectedSegmentIndex == 0 {
             mapView.alpha = 1
             tableView.alpha = 0
         } else {
@@ -52,7 +54,7 @@ class ViewController: UIViewController {
             tableView.alpha = 1
         }
         
-        saveSelectedSegmentIndex(sender.selectedSegmentIndex)
+        saveSelectedSegmentIndex(segmentedControl.selectedSegmentIndex)
     }
     
     //MARK: - UserDefaults
@@ -63,6 +65,7 @@ class ViewController: UIViewController {
     
     private func loadLastSelectedSegmentIndex() {
         segmentedControl.selectedSegmentIndex = defaults.integer(forKey: K.UserDefaults.selectedSegmentIndex)
+        handleSegmentChange()
     }
     
     //MARK: - Lifecycles
@@ -70,7 +73,13 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
+        tableView.delegate = self
+        tableView.dataSource = self
+        
         setupViews()
+        setupTableView()
+        
+        
         loadLastSelectedSegmentIndex()
         checkLocationServices()
     }
@@ -98,11 +107,49 @@ class ViewController: UIViewController {
         mapView.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor)
         tableView.anchor(top: segmentedControl.bottomAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor, padding: .init(top: 24, left: 0, bottom: 0, right: 0))
     }
-
-
+    
+    private func setupTableView() {
+        tableView.tableFooterView = UIView()
+        tableView.register(RestaurantCell.nib, forCellReuseIdentifier: RestaurantCell.reuseIdentifier)
+        
+        // Separator
+        tableView.separatorColor = #colorLiteral(red: 0.8784313725, green: 0.8823529412, blue: 0.8862745098, alpha: 1)
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12)
+        // + separator height: 2 points
+    }
 }
 
-//MARK: - CLLocationManagerDelegate
+
+
+
+
+
+
+// MARK: - TableView Delegate and Datasource
+
+extension ViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 10
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: RestaurantCell.reuseIdentifier, for: indexPath) as? RestaurantCell else { fatalError() }
+//        cell.business = self.podcasts[indexPath.row]
+        return cell
+        
+    }
+    
+    
+    
+
+    
+    
+    
+    
+}
+
+
+// MARK: - CLLocationManagerDelegate
 
 extension ViewController: CLLocationManagerDelegate {
     
@@ -116,7 +163,7 @@ extension ViewController: CLLocationManagerDelegate {
             setupLocationManager()
             checkLocationAuthorization()
         } else {
-            // ALERT: "Turn on Location Services"
+            /// - ALERT: "Turn on Location Services"
             AlertService.showLocationServicesOffAlert(on: self)
         }
     }
@@ -148,16 +195,20 @@ extension ViewController: CLLocationManagerDelegate {
             
             
             
+            
+            
             guard let location = locationManager.location?.coordinate else { return }
             let lat = location.latitude
             let lon = location.longitude
-
             
-            APIService.shared.fetchBusinesses(latitude: lat, longitude: lon, radius: initialSpanInMeters, sortBy: "distance", categories: "hotdogs") { (businesses) in
-                businesses.forEach { (business) in
-                    print(business.name)
-                }
+            APIService.shared.fetchBusinesses(latitude: lat, longitude: lon, radius: initialSpanInMeters, sortBy: "distance", categories: "burgers,pizza,mexican,chinese") { (businesses) in
+                self.businesses = businesses
+                self.tableView.reloadData()
             }
+            
+            
+            
+            
             
             
             
@@ -169,10 +220,10 @@ extension ViewController: CLLocationManagerDelegate {
             
             
         case .notDetermined:
-            // Request permission to use location services
+            /// Request permission to use location services
             locationManager.requestWhenInUseAuthorization()
         case .denied, .restricted:
-            // ALERT: "Turn on Location Services"
+            /// - ALERT: "Turn on Location Services"
             AlertService.showLocationServicesOffAlert(on: self)
             centerViewOnDefaultLocation()
         @unknown default:
@@ -198,9 +249,6 @@ extension ViewController: CLLocationManagerDelegate {
 //MARK: - MKMapViewDelegate
 
 extension ViewController: MKMapViewDelegate {
-    
-    
-    
 }
     
 

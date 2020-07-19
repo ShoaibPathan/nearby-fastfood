@@ -17,6 +17,8 @@
 		9E24287824C1E65200E663FC /* UIView + Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E24287724C1E65200E663FC /* UIView + Layout.swift */; };
 		9E24287A24C1FB1E00E663FC /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E24287924C1FB1E00E663FC /* Constants.swift */; };
 		9E24287C24C201FD00E663FC /* AlertService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E24287B24C201FD00E663FC /* AlertService.swift */; };
+		9E2C176124C3BAA400ED4ACC /* RestaurantCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2C175F24C3BAA400ED4ACC /* RestaurantCell.swift */; };
+		9E2C176224C3BAA400ED4ACC /* RestaurantCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9E2C176024C3BAA400ED4ACC /* RestaurantCell.xib */; };
 		9E80024524C24AFC001A46E3 /* RequestInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E80024424C24AFC001A46E3 /* RequestInterceptor.swift */; };
 		9E80024824C268FF001A46E3 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E80024724C268FF001A46E3 /* APIService.swift */; };
 		9E80024B24C28DD6001A46E3 /* Business.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E80024A24C28DD6001A46E3 /* Business.swift */; };
@@ -37,6 +39,8 @@
 		9E24287724C1E65200E663FC /* UIView + Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView + Layout.swift"; sourceTree = "<group>"; };
 		9E24287924C1FB1E00E663FC /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		9E24287B24C201FD00E663FC /* AlertService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertService.swift; sourceTree = "<group>"; };
+		9E2C175F24C3BAA400ED4ACC /* RestaurantCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantCell.swift; sourceTree = "<group>"; };
+		9E2C176024C3BAA400ED4ACC /* RestaurantCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RestaurantCell.xib; sourceTree = "<group>"; };
 		9E80024424C24AFC001A46E3 /* RequestInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestInterceptor.swift; sourceTree = "<group>"; };
 		9E80024724C268FF001A46E3 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		9E80024A24C28DD6001A46E3 /* Business.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Business.swift; sourceTree = "<group>"; };
@@ -85,7 +89,8 @@
 			children = (
 				9E24286324C1E24500E663FC /* AppDelegate.swift */,
 				9E24286524C1E24500E663FC /* SceneDelegate.swift */,
-				9E24286724C1E24500E663FC /* ViewController.swift */,
+				9E2C175E24C3BA4D00ED4ACC /* Views */,
+				9E2C175B24C3B9CC00ED4ACC /* Controllers */,
 				9E24286924C1E24500E663FC /* Main.storyboard */,
 				9E24286C24C1E24900E663FC /* Assets.xcassets */,
 				9E24286E24C1E24900E663FC /* LaunchScreen.storyboard */,
@@ -105,6 +110,23 @@
 				9E24287B24C201FD00E663FC /* AlertService.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		9E2C175B24C3B9CC00ED4ACC /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				9E24286724C1E24500E663FC /* ViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		9E2C175E24C3BA4D00ED4ACC /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				9E2C175F24C3BAA400ED4ACC /* RestaurantCell.swift */,
+				9E2C176024C3BAA400ED4ACC /* RestaurantCell.xib */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		9E80024624C24C93001A46E3 /* Alamofire */ = {
@@ -201,6 +223,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E2C176224C3BAA400ED4ACC /* RestaurantCell.xib in Resources */,
 				9E24287024C1E24900E663FC /* LaunchScreen.storyboard in Resources */,
 				9E24286D24C1E24900E663FC /* Assets.xcassets in Resources */,
 				9E24286B24C1E24500E663FC /* Main.storyboard in Resources */,
@@ -256,6 +279,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E2C176124C3BAA400ED4ACC /* RestaurantCell.swift in Sources */,
 				9E24287A24C1FB1E00E663FC /* Constants.swift in Sources */,
 				9E80024524C24AFC001A46E3 /* RequestInterceptor.swift in Sources */,
 				9E24286824C1E24500E663FC /* ViewController.swift in Sources */,
