@@ -18,9 +18,56 @@ class RestaurantCell: UITableViewCell {
     @IBOutlet weak var restaurantNameLabel: UILabel!
     @IBOutlet weak var restaurantInfoLabel: UILabel!
     
-    
     //Highlight color: powder blue
     //Info dollar color: pickle green
+    
+//    var dateFormatter: DateFormatter = {
+//        let formatter = DateFormatter()
+//        formatter.dateFormat = "MMM dd, yyyy"
+//        return formatter
+//    }()
+    
+    private var measurementFormatter: MeasurementFormatter = {
+        let formatter = MeasurementFormatter()
+        formatter.numberFormatter.maximumFractionDigits = 2
+        formatter.unitStyle = .long
+        return formatter
+    }()
+    
+    private var distance: String {
+        get {
+            var distanceInMeters = Measurement(value: business.distance ?? 0, unit: UnitLength.meters)
+            distanceInMeters.convert(to: .miles)
+            return measurementFormatter.string(from: distanceInMeters)
+        }
+    }
+    
+    var business: Business! {
+        didSet {
+            
+            restaurantNameLabel.text = business.name
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            restaurantInfoLabel.text = "$$$$ • \(distance)"
+            
+            
+            
+        }
+    }
+    
+    
+    
+    
+    
+    
     
     
 
