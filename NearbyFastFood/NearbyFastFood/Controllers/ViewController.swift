@@ -15,23 +15,16 @@ class ViewController: UIViewController {
     
     deinit { print("ViewController memory being reclaimed...") }
     
-    var businesses = [Business]() {
-        didSet {
-            businesses.forEach { (business) in
-                if let name = business.name,
-                    let latitude = business.coordinates?.latitude,
-                    let longitude = business.coordinates?.longitude {
-                    createAnnotation(name: name, latitude: latitude, longitude: longitude)
-                }
-            }
-        }
-    }
+    var businesses = [Business]()
     
     private let defaults = UserDefaults.standard
     private let locationManager = CLLocationManager()
     private let initialSpanInMeters: Double = 1000
+    private let regionChangeThreshold: Double = 250
     private let searchCategories = "burgers,pizza,mexican,chinese"
     private let sortByCriteria = "distance"
+    private var previousLocation: CLLocation?
+    private var regionIsCenteredOnUserLocation = false
     
     let segmentedControl: UISegmentedControl = {
         let sc = UISegmentedControl(items: ["Map", "List"])
@@ -55,7 +48,6 @@ class ViewController: UIViewController {
     }()
     
     @objc func handleSegmentChange() {
-        
         if segmentedControl.selectedSegmentIndex == 0 {
             mapView.alpha = 1
             tableView.alpha = 0
@@ -63,7 +55,6 @@ class ViewController: UIViewController {
             mapView.alpha = 0
             tableView.alpha = 1
         }
-        
         saveSelectedSegmentIndex(segmentedControl.selectedSegmentIndex)
     }
     
@@ -82,14 +73,9 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        mapView.delegate = self
-        tableView.delegate = self
-        tableView.dataSource = self
-        
+        setupMapView()
         setupViews()
         setupTableView()
-        
-        
         loadLastSelectedSegmentIndex()
         checkLocationServices()
     }
@@ -118,11 +104,17 @@ class ViewController: UIViewController {
         tableView.anchor(top: segmentedControl.bottomAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor, padding: .init(top: 24, left: 0, bottom: 0, right: 0))
     }
     
+    private func setupMapView() {
+        mapView.delegate = self
+        mapView.register(RestaurantAnnotationView.self, forAnnotationViewWithReuseIdentifier: RestaurantAnnotationView.reuseIdentifier)
+        mapView.pointOfInterestFilter = MKPointOfInterestFilter(excluding: [MKPointOfInterestCategory.restaurant])
+    }
+    
     private func setupTableView() {
+        tableView.delegate = self
+        tableView.dataSource = self
         tableView.tableFooterView = UIView()
         tableView.register(RestaurantCell.nib, forCellReuseIdentifier: RestaurantCell.reuseIdentifier)
-        
-        // Separator
         tableView.separatorColor = #colorLiteral(red: 0.8784313725, green: 0.8823529412, blue: 0.8862745098, alpha: 1)
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12)
         // + separator height: 2 points
@@ -195,6 +187,7 @@ extension ViewController: CLLocationManagerDelegate {
     private func fetchBusinesses(latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
         APIService.shared.fetchBusinesses(latitude: latitude, longitude: longitude, radius: initialSpanInMeters, sortBy: sortByCriteria, categories: searchCategories) { (businesses) in
             self.businesses = businesses
+            self.addAnnotations()
             self.tableView.reloadData()
         }
     }
@@ -210,6 +203,7 @@ extension ViewController: CLLocationManagerDelegate {
             /// - ALERT: "Turn on Location Services"
             AlertService.showLocationServicesOffAlert(on: self)
             centerViewOnDefaultLocation()
+            previousLocation = getCenterLocation(for: mapView)
         @unknown default:
             fatalError("CLAuthorizationStatus is unknown.")
         }
@@ -219,6 +213,7 @@ extension ViewController: CLLocationManagerDelegate {
         mapView.showsUserLocation = true
         centerViewOnUserLocation()
         locationManager.startUpdatingLocation()
+        previousLocation = getCenterLocation(for: mapView)
     }
     
     private func createAnnotation(name: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
@@ -227,15 +222,36 @@ extension ViewController: CLLocationManagerDelegate {
         annotation.coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
         self.mapView.addAnnotation(annotation)
     }
+    
+    private func addAnnotations() {
+        removeAnnotations()
+        businesses.forEach { (business) in
+            if let name = business.name,
+                let latitude = business.coordinates?.latitude,
+                let longitude = business.coordinates?.longitude {
+                createAnnotation(name: name, latitude: latitude, longitude: longitude)
+            }
+        }
+    }
+    
+    private func removeAnnotations() {
+        let annotations = mapView.annotations
+        mapView.removeAnnotations(annotations)
+    }
 
     //MARK: - Delegate Methods
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let location = locations.last else { return }
-        let center = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
-        let region = MKCoordinateRegion.init(center: center, latitudinalMeters: initialSpanInMeters, longitudinalMeters: initialSpanInMeters)
-        mapView.setRegion(region, animated: true)
-        locationManager.stopUpdatingLocation()
+        
+        // Do not center on user location after the initial update
+        if !regionIsCenteredOnUserLocation {
+            guard let location = locations.last else { return }
+            let center = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+            let region = MKCoordinateRegion.init(center: center, latitudinalMeters: initialSpanInMeters, longitudinalMeters: initialSpanInMeters)
+            mapView.setRegion(region, animated: true)
+            regionIsCenteredOnUserLocation = true
+        }
+        regionIsCenteredOnUserLocation = true
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
@@ -252,19 +268,40 @@ extension ViewController: CLLocationManagerDelegate {
 
 extension ViewController: MKMapViewDelegate {
     
-//    private func getCenterLocation(for mapView: MKMapView) -> CLLocation {
-//        let latitude = mapView.centerCoordinate.latitude
-//        let longitude = mapView.centerCoordinate.longitude
-//        return CLLocation(latitude: latitude, longitude: longitude)
-//    }
+    private func getCenterLocation(for mapView: MKMapView) -> CLLocation {
+        let latitude = mapView.centerCoordinate.latitude
+        let longitude = mapView.centerCoordinate.longitude
+        return CLLocation(latitude: latitude, longitude: longitude)
+    }
     
     //MARK: - Delegate Methods
+    
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+    }
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         let latitude = mapView.centerCoordinate.latitude
         let longitude = mapView.centerCoordinate.longitude
+        
+        // Check if region has changed more than threshold
+        let center = getCenterLocation(for: mapView)
+        guard let previousLocation = previousLocation else { return }
+        guard center.distance(from: previousLocation) > regionChangeThreshold else { return }
+        self.previousLocation = center
+        
         fetchBusinesses(latitude: latitude, longitude: longitude)
     }
+    
+//    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+//
+//        guard let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: RestaurantAnnotationView.reuseIdentifier) as? RestaurantAnnotationView else { fatalError() }
+//
+//        annotationView.annotation = annotation
+//
+//        if annotation is MKUserLocation { return nil }
+//
+//        return annotationView
+//    }
     
 }
     

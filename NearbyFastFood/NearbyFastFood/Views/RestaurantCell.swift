@@ -30,7 +30,6 @@ class RestaurantCell: UITableViewCell {
     static var reuseIdentifier: String { String(describing: self) }
     static var nib: UINib { UINib(nibName: String(describing: self), bundle: nil) }
     
-    
     @IBOutlet weak var restaurantIcon: UIImageView!
     @IBOutlet weak var restaurantNameLabel: UILabel!
     @IBOutlet weak var restaurantInfoLabel: UILabel!
