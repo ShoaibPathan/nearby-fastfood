@@ -19,8 +19,15 @@ class ViewController: UIViewController {
     
     private let defaults = UserDefaults.standard
     private let locationManager = CLLocationManager()
-    private let initialSpanInMeters: Double = 1000
-    private let regionChangeThreshold: Double = 250
+    private let initialLocation = CLLocationCoordinate2D(latitude: 40.758896, longitude: -73.985130)
+    private var userLocation: CLLocationCoordinate2D {
+        get {
+            guard let location = locationManager.location?.coordinate else { return initialLocation }
+            return location
+        }
+    }
+    private let regionInMeters: Double = 1000
+    private let regionChangeThreshold: Double = 200
     private let searchCategories = "burgers,pizza,mexican,chinese"
     private let sortByCriteria = "distance"
     private var previousLocation: CLLocation?
@@ -31,7 +38,7 @@ class ViewController: UIViewController {
         sc.backgroundColor = #colorLiteral(red: 0.8784313725, green: 0.8823529412, blue: 0.8862745098, alpha: 1)
         sc.selectedSegmentTintColor = #colorLiteral(red: 0.2509803922, green: 0, blue: 0.5098039216, alpha: 1)
         sc.setTitleTextAttributes([NSAttributedString.Key.foregroundColor : #colorLiteral(red: 0.1176470588, green: 0.1529411765, blue: 0.1803921569, alpha: 1)], for: UIControl.State.normal)
-        sc.setTitleTextAttributes([NSAttributedString.Key.foregroundColor : #colorLiteral(red: 0.9450980392, green: 0.9058823529, blue: 0.7137254902, alpha: 1)], for: UIControl.State.selected)
+        sc.setTitleTextAttributes([NSAttributedString.Key.foregroundColor : #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)], for: UIControl.State.selected)
         sc.selectedSegmentIndex = 0 // UserDefaults Preference
         sc.addTarget(self, action: #selector(handleSegmentChange), for: .valueChanged)
         return sc
@@ -106,8 +113,9 @@ class ViewController: UIViewController {
     
     private func setupMapView() {
         mapView.delegate = self
-        mapView.register(RestaurantAnnotationView.self, forAnnotationViewWithReuseIdentifier: RestaurantAnnotationView.reuseIdentifier)
         mapView.pointOfInterestFilter = MKPointOfInterestFilter(excluding: [MKPointOfInterestCategory.restaurant])
+        mapView.register(RestaurantAnnotationView.self, forAnnotationViewWithReuseIdentifier: RestaurantAnnotationView.reuseIdentifier)
+        mapView.register(RestaurantClusterView.self, forAnnotationViewWithReuseIdentifier: RestaurantClusterView.reuseIdentifier)
     }
     
     private func setupTableView() {
@@ -171,24 +179,18 @@ extension ViewController: CLLocationManagerDelegate {
         }
     }
     
-    private func centerViewOnDefaultLocation() {
-        let defaultLocation = CLLocationCoordinate2D(latitude: 40.758896, longitude: -73.985130)
-        let region = MKCoordinateRegion.init(center: defaultLocation, latitudinalMeters: initialSpanInMeters, longitudinalMeters: initialSpanInMeters)
+    private func centreMap(on location: CLLocationCoordinate2D) {
+        let region = MKCoordinateRegion.init(center: location, latitudinalMeters: regionInMeters, longitudinalMeters: regionInMeters)
         mapView.setRegion(region, animated: true)
     }
     
-    private func centerViewOnUserLocation() {
-        if let location = locationManager.location?.coordinate {
-            let region = MKCoordinateRegion.init(center: location, latitudinalMeters: initialSpanInMeters, longitudinalMeters: initialSpanInMeters)
-            mapView.setRegion(region, animated: true)
-        }
-    }
-    
     private func fetchBusinesses(latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
-        APIService.shared.fetchBusinesses(latitude: latitude, longitude: longitude, radius: initialSpanInMeters, sortBy: sortByCriteria, categories: searchCategories) { (businesses) in
-            self.businesses = businesses
-            self.addAnnotations()
-            self.tableView.reloadData()
+        APIService.shared.fetchBusinesses(latitude: latitude, longitude: longitude, radius: regionInMeters, sortBy: sortByCriteria, categories: searchCategories) { [weak self] (businesses) in
+            self?.businesses = businesses
+            DispatchQueue.main.async {
+                self?.addAnnotations()
+                self?.tableView.reloadData()
+            }
         }
     }
     
@@ -202,7 +204,7 @@ extension ViewController: CLLocationManagerDelegate {
         case .denied, .restricted:
             /// - ALERT: "Turn on Location Services"
             AlertService.showLocationServicesOffAlert(on: self)
-            centerViewOnDefaultLocation()
+            centreMap(on: initialLocation)
             previousLocation = getCenterLocation(for: mapView)
         @unknown default:
             fatalError("CLAuthorizationStatus is unknown.")
@@ -211,7 +213,7 @@ extension ViewController: CLLocationManagerDelegate {
     
     private func startTrackingUserLocation() {
         mapView.showsUserLocation = true
-        centerViewOnUserLocation()
+        centreMap(on: userLocation)
         locationManager.startUpdatingLocation()
         previousLocation = getCenterLocation(for: mapView)
     }
@@ -247,7 +249,7 @@ extension ViewController: CLLocationManagerDelegate {
         if !regionIsCenteredOnUserLocation {
             guard let location = locations.last else { return }
             let center = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
-            let region = MKCoordinateRegion.init(center: center, latitudinalMeters: initialSpanInMeters, longitudinalMeters: initialSpanInMeters)
+            let region = MKCoordinateRegion.init(center: center, latitudinalMeters: regionInMeters, longitudinalMeters: regionInMeters)
             mapView.setRegion(region, animated: true)
             regionIsCenteredOnUserLocation = true
         }
@@ -292,17 +294,19 @@ extension ViewController: MKMapViewDelegate {
         fetchBusinesses(latitude: latitude, longitude: longitude)
     }
     
-//    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-//
-//        guard let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: RestaurantAnnotationView.reuseIdentifier) as? RestaurantAnnotationView else { fatalError() }
-//
-//        annotationView.annotation = annotation
-//
-//        if annotation is MKUserLocation { return nil }
-//
-//        return annotationView
-//    }
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        switch annotation {
+        case is MKUserLocation:
+            return nil
+        case is MKClusterAnnotation:
+            guard let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: RestaurantClusterView.reuseIdentifier) as? RestaurantClusterView else { fatalError() }
+            return annotationView
+        default:
+            guard let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: RestaurantAnnotationView.reuseIdentifier) as? RestaurantAnnotationView else { fatalError() }
+            return annotationView
+        }
+    }
     
 }
-    
+
 

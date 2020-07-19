@@ -27,9 +27,5 @@ struct Coordinates: Codable {
     let latitude: Double
     let longitude: Double
 }
-    
-//    private enum CodingKeys: String, CodingKey {
-//        case imageURL = "image_url"
-//        case id, name, distance
-//    }
-    
+
+
