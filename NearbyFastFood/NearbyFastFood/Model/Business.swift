@@ -15,14 +15,18 @@ struct Business: Codable, Identifiable {
     let distance: Double?
     let imageUrl: String?
     let categories: [Categories]?
+    let coordinates: Coordinates?
 }
 
 struct Categories: Codable {
     let alias: String?
     let title: String?
 }
-    
-    
+
+struct Coordinates: Codable {
+    let latitude: Double
+    let longitude: Double
+}
     
 //    private enum CodingKeys: String, CodingKey {
 //        case imageURL = "image_url"

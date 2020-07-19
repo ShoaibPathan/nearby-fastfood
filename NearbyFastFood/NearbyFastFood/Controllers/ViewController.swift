@@ -13,15 +13,25 @@ import Alamofire
 
 class ViewController: UIViewController {
     
-    deinit {
-        print("ViewController memory being reclaimed...")
-    }
+    deinit { print("ViewController memory being reclaimed...") }
     
-    var businesses = [Business]()
+    var businesses = [Business]() {
+        didSet {
+            businesses.forEach { (business) in
+                if let name = business.name,
+                    let latitude = business.coordinates?.latitude,
+                    let longitude = business.coordinates?.longitude {
+                    createAnnotation(name: name, latitude: latitude, longitude: longitude)
+                }
+            }
+        }
+    }
     
     private let defaults = UserDefaults.standard
     private let locationManager = CLLocationManager()
     private let initialSpanInMeters: Double = 1000
+    private let searchCategories = "burgers,pizza,mexican,chinese"
+    private let sortByCriteria = "distance"
     
     let segmentedControl: UISegmentedControl = {
         let sc = UISegmentedControl(items: ["Map", "List"])
@@ -125,6 +135,16 @@ class ViewController: UIViewController {
 
 
 
+
+
+
+
+
+
+
+
+
+
 // MARK: - TableView Delegate and Datasource
 
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
@@ -137,14 +157,6 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         cell.business = self.businesses[indexPath.row]
         return cell
     }
-    
-    
-    
-
-    
-    
-    
-    
 }
 
 
@@ -180,44 +192,17 @@ extension ViewController: CLLocationManagerDelegate {
         }
     }
     
+    private func fetchBusinesses(latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
+        APIService.shared.fetchBusinesses(latitude: latitude, longitude: longitude, radius: initialSpanInMeters, sortBy: sortByCriteria, categories: searchCategories) { (businesses) in
+            self.businesses = businesses
+            self.tableView.reloadData()
+        }
+    }
+    
     private func checkLocationAuthorization() {
         switch CLLocationManager.authorizationStatus() {
         case .authorizedWhenInUse, .authorizedAlways:
-            
-            mapView.showsUserLocation = true
-            centerViewOnUserLocation()
-            locationManager.startUpdatingLocation()
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            guard let location = locationManager.location?.coordinate else { return }
-            let lat = location.latitude
-            let lon = location.longitude
-            
-            APIService.shared.fetchBusinesses(latitude: lat, longitude: lon, radius: initialSpanInMeters, sortBy: "distance", categories: "burgers,pizza,mexican,chinese") { (businesses) in
-                self.businesses = businesses
-                self.tableView.reloadData()
-            }
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-
-            
-            
+            startTrackingUserLocation()
         case .notDetermined:
             /// Request permission to use location services
             locationManager.requestWhenInUseAuthorization()
@@ -229,18 +214,36 @@ extension ViewController: CLLocationManagerDelegate {
             fatalError("CLAuthorizationStatus is unknown.")
         }
     }
+    
+    private func startTrackingUserLocation() {
+        mapView.showsUserLocation = true
+        centerViewOnUserLocation()
+        locationManager.startUpdatingLocation()
+    }
+    
+    private func createAnnotation(name: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
+        let annotation = MKPointAnnotation()
+        annotation.title = name
+        annotation.coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        self.mapView.addAnnotation(annotation)
+    }
 
     //MARK: - Delegate Methods
-    
+
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
         let center = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
         let region = MKCoordinateRegion.init(center: center, latitudinalMeters: initialSpanInMeters, longitudinalMeters: initialSpanInMeters)
         mapView.setRegion(region, animated: true)
+        locationManager.stopUpdatingLocation()
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         checkLocationAuthorization()
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("Location Manager Error:", error.localizedDescription)
     }
     
 }
@@ -248,6 +251,21 @@ extension ViewController: CLLocationManagerDelegate {
 //MARK: - MKMapViewDelegate
 
 extension ViewController: MKMapViewDelegate {
+    
+//    private func getCenterLocation(for mapView: MKMapView) -> CLLocation {
+//        let latitude = mapView.centerCoordinate.latitude
+//        let longitude = mapView.centerCoordinate.longitude
+//        return CLLocation(latitude: latitude, longitude: longitude)
+//    }
+    
+    //MARK: - Delegate Methods
+    
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        let latitude = mapView.centerCoordinate.latitude
+        let longitude = mapView.centerCoordinate.longitude
+        fetchBusinesses(latitude: latitude, longitude: longitude)
+    }
+    
 }
     
 

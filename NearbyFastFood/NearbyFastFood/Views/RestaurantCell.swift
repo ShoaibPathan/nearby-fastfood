@@ -11,7 +11,7 @@ import UIKit
 enum RestaurantCategory: String {
     case burgers, pizza, mexican, chinese
     
-    var restaurantIcon: UIImage {
+    var icon: UIImage {
         switch self {
         case .burgers:
             return UIImage(named: "burger") ?? UIImage()
@@ -24,10 +24,6 @@ enum RestaurantCategory: String {
         }
     }
 }
-
-
-
-
 
 class RestaurantCell: UITableViewCell {
     
@@ -63,7 +59,6 @@ class RestaurantCell: UITableViewCell {
             // If price is nil, return default
             guard let dollarCount = business.price?.count else { return NSMutableAttributedString(string: defaultStr) }
             
-            // Change Price Color
             let mutableStr = NSMutableAttributedString(string: defaultStr)
             let range = NSRange(location: 0, length: dollarCount)
             mutableStr.addAttributes([NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0, green: 0.7411764706, blue: 0.6666666667, alpha: 1)], range: range)
@@ -71,55 +66,38 @@ class RestaurantCell: UITableViewCell {
         }
     }
     
-    
-    
-    
-    
-    
     let burgers: Set = ["burgers"]
     let pizza: Set = ["pizza"]
     let mexican: Set = ["mexican", "easternmexican", "jaliscan", "northernmexican", "oaxacan", "pueblan", "tacos", "tamales", "yucatan"]
     let chinese: Set = ["chinese", "cantonese", "congee", "dimsum", "fuzhou", "hainan", "hakka", "henghwa", "hokkien", "hunan", "pekinese", "shanghainese", "szechuan", "teochew"]
-
     
+    private func restaurantIs(_ category: Set<String>) -> Bool {
+        guard let categories = business.categories else { return false }
+        var aliases: [String] = []
+        categories.forEach { (category) in
+            aliases.append(category.alias ?? "")
+        }
+        return aliases.contains(where: {category.contains($0)})
+    }
     
     private func checkRestaurantCategory() -> RestaurantCategory? {
-        
         let restaurantCategory: RestaurantCategory
-
-        guard let categories = business.categories else { return nil }
-        
-        var aliasArray: [String] = []
-        categories.forEach { (category) in
-            aliasArray.append(category.alias ?? "")
-        }
-        
-        if aliasArray.contains(where: {burgers.contains($0)}) {
-            restaurantCategory = .burgers
-        } else if aliasArray.contains(where: {pizza.contains($0)}) {
-            restaurantCategory = .pizza
-        } else if aliasArray.contains(where: {mexican.contains($0)}) {
-            restaurantCategory = .mexican
-        } else if aliasArray.contains(where: {chinese.contains($0)}) {
-            restaurantCategory = .chinese
-        } else { return nil }
-        
+        if restaurantIs(burgers) { restaurantCategory = .burgers }
+        else if restaurantIs(pizza) { restaurantCategory = .pizza }
+        else if restaurantIs(mexican) { restaurantCategory = .mexican }
+        else if restaurantIs(chinese) { restaurantCategory = .chinese }
+        else { return nil }
         return restaurantCategory
     }
     
-    
-    
     private var icon: UIImage {
         get {
-            guard let restaurantCategory = checkRestaurantCategory() else { return UIImage() }
-            return restaurantCategory.restaurantIcon
+            if let restaurantCategory = checkRestaurantCategory() {
+                return restaurantCategory.icon
+            } else { return UIImage() }
         }
     }
-    
-    
-    
-    
-    
+
     var business: Business! {
         didSet {
             restaurantIcon.image = icon

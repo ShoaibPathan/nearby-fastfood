@@ -43,55 +43,17 @@ public class APIService {
                 do {
                     let decoder = JSONDecoder()
                     decoder.keyDecodingStrategy = .convertFromSnakeCase
-                    
                     let searchResults = try decoder.decode(SearchResults.self, from: data)
                     completion(searchResults.businesses)
-                    
                 } catch let jsonErr {
                     print("Failed to decode:", jsonErr)
                 }
-                
-                
-                
-                
-                
-                
-                
-                
             case .failure(let error):
                 print("Failed to fetch businesses:", error)
             }
         }
-        
-        
-
     }
-    
-    
-        
-        
-        
-        
-        
-        
-        
-        
-//        guard let url = URL(string: baseURL) else { return }
-//
-//        URLSession.shared.dataTask(with: url) { (data, response, err) in
-//            if let err = err {
-//                completion(.failure(err))
-//                return
-//            }
-//            if let data = data {
-//                do {
-//                    let businesses = try JSONDecoder().decode([Business].self, from: data)
-//                    completion(.success(businesses))
-//                } catch { completion(.failure(error)) }
-//            }
-//        }.resume()
-        
-    }
+}
 
 
 
