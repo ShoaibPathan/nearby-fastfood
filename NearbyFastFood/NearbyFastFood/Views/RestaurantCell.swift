@@ -8,6 +8,27 @@
 
 import UIKit
 
+enum RestaurantCategory: String {
+    case burgers, pizza, mexican, chinese
+    
+    var restaurantIcon: UIImage {
+        switch self {
+        case .burgers:
+            return UIImage(named: "burger") ?? UIImage()
+        case .pizza:
+            return UIImage(named: "pizza") ?? UIImage()
+        case .mexican:
+            return UIImage(named: "burrito") ?? UIImage()
+        case .chinese:
+            return UIImage(named: "chopsticks") ?? UIImage()
+        }
+    }
+}
+
+
+
+
+
 class RestaurantCell: UITableViewCell {
     
     static var reuseIdentifier: String { String(describing: self) }
@@ -50,10 +71,48 @@ class RestaurantCell: UITableViewCell {
         }
     }
     
-    var business: Business! {
-        didSet {
-            restaurantNameLabel.text = business.name
-            restaurantInfoLabel.attributedText = restaurantInfo
+    
+    
+    
+    
+    
+    let burgers: Set = ["burgers"]
+    let pizza: Set = ["pizza"]
+    let mexican: Set = ["mexican", "easternmexican", "jaliscan", "northernmexican", "oaxacan", "pueblan", "tacos", "tamales", "yucatan"]
+    let chinese: Set = ["chinese", "cantonese", "congee", "dimsum", "fuzhou", "hainan", "hakka", "henghwa", "hokkien", "hunan", "pekinese", "shanghainese", "szechuan", "teochew"]
+
+    
+    
+    private func checkRestaurantCategory() -> RestaurantCategory? {
+        
+        let restaurantCategory: RestaurantCategory
+
+        guard let categories = business.categories else { return nil }
+        
+        var aliasArray: [String] = []
+        categories.forEach { (category) in
+            aliasArray.append(category.alias ?? "")
+        }
+        
+        if aliasArray.contains(where: {burgers.contains($0)}) {
+            restaurantCategory = .burgers
+        } else if aliasArray.contains(where: {pizza.contains($0)}) {
+            restaurantCategory = .pizza
+        } else if aliasArray.contains(where: {mexican.contains($0)}) {
+            restaurantCategory = .mexican
+        } else if aliasArray.contains(where: {chinese.contains($0)}) {
+            restaurantCategory = .chinese
+        } else { return nil }
+        
+        return restaurantCategory
+    }
+    
+    
+    
+    private var icon: UIImage {
+        get {
+            guard let restaurantCategory = checkRestaurantCategory() else { return UIImage() }
+            return restaurantCategory.restaurantIcon
         }
     }
     
@@ -61,16 +120,14 @@ class RestaurantCell: UITableViewCell {
     
     
     
+    var business: Business! {
+        didSet {
+            restaurantIcon.image = icon
+            restaurantNameLabel.text = business.name
+            restaurantInfoLabel.attributedText = restaurantInfo
+        }
+    }
     
-    
-    
-    
-    
-    
-    
-    
-    
-
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

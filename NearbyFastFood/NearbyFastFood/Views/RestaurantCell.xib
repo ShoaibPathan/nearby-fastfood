@@ -22,7 +22,7 @@
                             <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="Chw-cN-XDs">
                                 <rect key="frame" x="16" y="16" width="319" height="52"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Ramen" translatesAutoresizingMaskIntoConstraints="NO" id="21u-1R-U64">
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chopsticks" translatesAutoresizingMaskIntoConstraints="NO" id="21u-1R-U64">
                                         <rect key="frame" x="0.0" y="10" width="32" height="32"/>
                                         <color key="tintColor" red="0.11764705882352941" green="0.15294117647058825" blue="0.1803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
@@ -92,7 +92,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="Ramen" width="267" height="268"/>
         <image name="chevron.right" catalog="system" width="96" height="128"/>
+        <image name="chopsticks" width="267" height="268"/>
     </resources>
 </document>
