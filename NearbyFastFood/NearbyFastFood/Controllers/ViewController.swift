@@ -33,6 +33,12 @@ class ViewController: UIViewController {
     private var previousLocation: CLLocation?
     private var regionIsCenteredOnUserLocation = false
     
+    let feedbackGenerator: UIImpactFeedbackGenerator = {
+        let generator = UIImpactFeedbackGenerator(style: .medium)
+        generator.prepare()
+        return generator
+    }()
+    
     let segmentedControl: UISegmentedControl = {
         let sc = UISegmentedControl(items: ["Map", "List"])
         sc.backgroundColor = #colorLiteral(red: 0.8784313725, green: 0.8823529412, blue: 0.8862745098, alpha: 1)
@@ -222,11 +228,11 @@ extension ViewController: CLLocationManagerDelegate {
         let annotation = MKPointAnnotation()
         annotation.title = name
         annotation.coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        
         self.mapView.addAnnotation(annotation)
     }
     
     private func addAnnotations() {
-        removeAnnotations()
         businesses.forEach { (business) in
             if let name = business.name,
                 let latitude = business.coordinates?.latitude,
@@ -234,6 +240,7 @@ extension ViewController: CLLocationManagerDelegate {
                 createAnnotation(name: name, latitude: latitude, longitude: longitude)
             }
         }
+        removeAnnotations()
     }
     
     private func removeAnnotations() {
@@ -264,6 +271,7 @@ extension ViewController: CLLocationManagerDelegate {
         print("Location Manager Error:", error.localizedDescription)
     }
     
+    
 }
 
 //MARK: - MKMapViewDelegate
@@ -279,7 +287,18 @@ extension ViewController: MKMapViewDelegate {
     //MARK: - Delegate Methods
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        if #available(iOS 10,*) {
+            feedbackGenerator.impactOccurred()
+        }
+        
+        
+        // IF CLUSTER THAN ZOOM IN MAP FOR USER
+        
     }
+    
+    
+    
+    
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         let latitude = mapView.centerCoordinate.latitude
@@ -289,8 +308,8 @@ extension ViewController: MKMapViewDelegate {
         let center = getCenterLocation(for: mapView)
         guard let previousLocation = previousLocation else { return }
         guard center.distance(from: previousLocation) > regionChangeThreshold else { return }
-        self.previousLocation = center
         
+        self.previousLocation = center
         fetchBusinesses(latitude: latitude, longitude: longitude)
     }
     
