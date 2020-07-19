@@ -11,6 +11,7 @@ import Foundation
 struct Business: Codable, Identifiable {
     let id: String?
     let name: String?
+    let price: String?
     let distance: Double?
     let imageUrl: String?
     let categories: [Categories]?

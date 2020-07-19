@@ -18,15 +18,8 @@ class RestaurantCell: UITableViewCell {
     @IBOutlet weak var restaurantNameLabel: UILabel!
     @IBOutlet weak var restaurantInfoLabel: UILabel!
     
-    //Highlight color: powder blue
-    //Info dollar color: pickle green
-    
-//    var dateFormatter: DateFormatter = {
-//        let formatter = DateFormatter()
-//        formatter.dateFormat = "MMM dd, yyyy"
-//        return formatter
-//    }()
-    
+    ////////!!!!!!!!!//Highlight color: powder blue
+
     private var measurementFormatter: MeasurementFormatter = {
         let formatter = MeasurementFormatter()
         formatter.numberFormatter.maximumFractionDigits = 2
@@ -41,27 +34,34 @@ class RestaurantCell: UITableViewCell {
             return measurementFormatter.string(from: distanceInMeters)
         }
     }
+
+    private var restaurantInfo: NSMutableAttributedString {
+        get {
+            let defaultStr = "$$$$ • \(distance)"
+            
+            // If price is nil, return default
+            guard let dollarCount = business.price?.count else { return NSMutableAttributedString(string: defaultStr) }
+            
+            // Change Price Color
+            let mutableStr = NSMutableAttributedString(string: defaultStr)
+            let range = NSRange(location: 0, length: dollarCount)
+            mutableStr.addAttributes([NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0, green: 0.7411764706, blue: 0.6666666667, alpha: 1)], range: range)
+            return mutableStr
+        }
+    }
     
     var business: Business! {
         didSet {
-            
             restaurantNameLabel.text = business.name
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            restaurantInfoLabel.text = "$$$$ • \(distance)"
-            
-            
-            
+            restaurantInfoLabel.attributedText = restaurantInfo
         }
     }
+    
+    
+    
+    
+    
+    
     
     
     
@@ -74,6 +74,7 @@ class RestaurantCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
