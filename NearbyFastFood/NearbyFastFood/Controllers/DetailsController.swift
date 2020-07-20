@@ -28,9 +28,10 @@ class DetailsController: UIViewController {
     }
     
     let restaurantImageView: UIImageView = {
-        let imageView = ScaleAspectFitImageView()
-//        imageView.contentMode = .scaleAspectFit
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
         imageView.backgroundColor = #colorLiteral(red: 0.8784313725, green: 0.8823529412, blue: 0.8862745098, alpha: 1)
+        imageView.clipsToBounds = true
         return imageView
     }()
 
