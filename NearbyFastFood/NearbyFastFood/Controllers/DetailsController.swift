@@ -92,7 +92,6 @@ class DetailsController: UIViewController {
     
 
     //Share button style:
-//Image name: “share”
 //Should open default iOS Share sheet with business’s Yelp page URL
 
 
@@ -111,7 +110,10 @@ class DetailsController: UIViewController {
     }
     
     @objc func handleShareButton() {
-        print("Share!")
+        guard let url = business.url else { return }
+        let items = [URL(string: url)!]
+        let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
+        present(ac, animated: true)
     }
     
     

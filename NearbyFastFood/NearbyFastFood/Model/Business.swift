@@ -16,6 +16,7 @@ struct Business: Codable, Identifiable {
     let imageUrl: String?
     let categories: [Categories]?
     let coordinates: Coordinates?
+    let url: String?
 }
 
 struct Categories: Codable {
