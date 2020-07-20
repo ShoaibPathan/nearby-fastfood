@@ -21,6 +21,9 @@
 		9E2C176224C3BAA400ED4ACC /* RestaurantCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9E2C176024C3BAA400ED4ACC /* RestaurantCell.xib */; };
 		9E2C176424C4ABC400ED4ACC /* RestaurantAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2C176324C4ABC400ED4ACC /* RestaurantAnnotationView.swift */; };
 		9E2C176624C530F900ED4ACC /* DetailsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2C176524C530F900ED4ACC /* DetailsController.swift */; };
+		9E2C176B24C546CE00ED4ACC /* InsetsLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2C176A24C546CE00ED4ACC /* InsetsLabel.swift */; };
+		9E2C176D24C54F7E00ED4ACC /* UIImageView + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2C176C24C54F7E00ED4ACC /* UIImageView + Extensions.swift */; };
+		9E2C177124C5562100ED4ACC /* ScaleAspectFitImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2C177024C5562000ED4ACC /* ScaleAspectFitImageView.swift */; };
 		9E80024524C24AFC001A46E3 /* RequestInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E80024424C24AFC001A46E3 /* RequestInterceptor.swift */; };
 		9E80024824C268FF001A46E3 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E80024724C268FF001A46E3 /* APIService.swift */; };
 		9E80024B24C28DD6001A46E3 /* Business.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E80024A24C28DD6001A46E3 /* Business.swift */; };
@@ -45,6 +48,9 @@
 		9E2C176024C3BAA400ED4ACC /* RestaurantCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RestaurantCell.xib; sourceTree = "<group>"; };
 		9E2C176324C4ABC400ED4ACC /* RestaurantAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantAnnotationView.swift; sourceTree = "<group>"; };
 		9E2C176524C530F900ED4ACC /* DetailsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsController.swift; sourceTree = "<group>"; };
+		9E2C176A24C546CE00ED4ACC /* InsetsLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsetsLabel.swift; sourceTree = "<group>"; };
+		9E2C176C24C54F7E00ED4ACC /* UIImageView + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView + Extensions.swift"; sourceTree = "<group>"; };
+		9E2C177024C5562000ED4ACC /* ScaleAspectFitImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScaleAspectFitImageView.swift; sourceTree = "<group>"; };
 		9E80024424C24AFC001A46E3 /* RequestInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestInterceptor.swift; sourceTree = "<group>"; };
 		9E80024724C268FF001A46E3 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		9E80024A24C28DD6001A46E3 /* Business.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Business.swift; sourceTree = "<group>"; };
@@ -99,7 +105,7 @@
 				9E24286C24C1E24900E663FC /* Assets.xcassets */,
 				9E24286E24C1E24900E663FC /* LaunchScreen.storyboard */,
 				9E24287124C1E24900E663FC /* Info.plist */,
-				9E24287724C1E65200E663FC /* UIView + Layout.swift */,
+				9E2C176924C53E1200ED4ACC /* Extensions */,
 				9E80024924C289A8001A46E3 /* Constants */,
 				9E24287D24C202EF00E663FC /* Services */,
 				9E80024624C24C93001A46E3 /* Alamofire */,
@@ -131,8 +137,19 @@
 				9E2C175F24C3BAA400ED4ACC /* RestaurantCell.swift */,
 				9E2C176024C3BAA400ED4ACC /* RestaurantCell.xib */,
 				9E2C176324C4ABC400ED4ACC /* RestaurantAnnotationView.swift */,
+				9E2C176A24C546CE00ED4ACC /* InsetsLabel.swift */,
+				9E2C177024C5562000ED4ACC /* ScaleAspectFitImageView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		9E2C176924C53E1200ED4ACC /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				9E24287724C1E65200E663FC /* UIView + Layout.swift */,
+				9E2C176C24C54F7E00ED4ACC /* UIImageView + Extensions.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		9E80024624C24C93001A46E3 /* Alamofire */ = {
@@ -286,9 +303,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				9E2C176124C3BAA400ED4ACC /* RestaurantCell.swift in Sources */,
+				9E2C177124C5562100ED4ACC /* ScaleAspectFitImageView.swift in Sources */,
 				9E24287A24C1FB1E00E663FC /* Constants.swift in Sources */,
 				9E80024524C24AFC001A46E3 /* RequestInterceptor.swift in Sources */,
 				9E24286824C1E24500E663FC /* ViewController.swift in Sources */,
+				9E2C176D24C54F7E00ED4ACC /* UIImageView + Extensions.swift in Sources */,
 				9E2C176624C530F900ED4ACC /* DetailsController.swift in Sources */,
 				9E24286424C1E24500E663FC /* AppDelegate.swift in Sources */,
 				9E24287824C1E65200E663FC /* UIView + Layout.swift in Sources */,
@@ -297,6 +316,7 @@
 				9E80024B24C28DD6001A46E3 /* Business.swift in Sources */,
 				9E80024824C268FF001A46E3 /* APIService.swift in Sources */,
 				9E24286624C1E24500E663FC /* SceneDelegate.swift in Sources */,
+				9E2C176B24C546CE00ED4ACC /* InsetsLabel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

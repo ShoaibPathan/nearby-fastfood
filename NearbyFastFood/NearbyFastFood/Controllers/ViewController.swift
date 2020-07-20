@@ -113,10 +113,7 @@ class ViewController: UIViewController {
     private func setupViews() {
         view.backgroundColor = .white
         navigationItem.title = "Fast Food Places"
-        
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
-        
-        //[redView, blueView].forEach { view.addSubview($0) }
         view.addSubview(segmentedControl)
         view.insertSubview(mapView, belowSubview: segmentedControl)
         view.insertSubview(tableView, belowSubview: mapView)
