@@ -81,7 +81,7 @@ class DetailsController: UIViewController {
         nameLabel.anchor(top: nil, leading: view.leadingAnchor, bottom: restaurantImageView.bottomAnchor, trailing: view.trailingAnchor)
         stackView.anchor(top: restaurantImageView.bottomAnchor, leading: view.leadingAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, trailing: view.trailingAnchor)
         mapView.anchor(top: stackView.topAnchor, leading: stackView.leadingAnchor, bottom: nil, trailing: stackView.trailingAnchor, padding: .init(top: 16, left: 16, bottom: 0, right: 16))
-        callButton.anchor(top: nil, leading: stackView.leadingAnchor, bottom: stackView.bottomAnchor, trailing: stackView.trailingAnchor, padding: .init(top: 0, left: 16, bottom: 16, right: 16), size: .init(width: 0, height: 48.0))
+        callButton.anchor(top: nil, leading: stackView.leadingAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, trailing: stackView.trailingAnchor, padding: .init(top: 0, left: 16, bottom: 16, right: 16), size: .init(width: 0, height: 48.0))
     }
     
 
@@ -90,10 +90,6 @@ class DetailsController: UIViewController {
 //Directions line color and width: blu cepheus, 4 points
 //Map should show driving directions from user’s location to place location using MapKit API
     
-
-    //Share button style:
-//Should open default iOS Share sheet with business’s Yelp page URL
-
 
     
     
@@ -110,13 +106,32 @@ class DetailsController: UIViewController {
     }
     
     @objc func handleShareButton() {
+        
+        
+        
         guard let url = business.url else { return }
-        let items = [URL(string: url)!]
-        let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
-        present(ac, animated: true)
+        let urlToShare = URL(string: url)!
+        let sharingActivityItemProvider = BusinessUrl(url: urlToShare)
+        let activityViewController = UIActivityViewController(activityItems: [sharingActivityItemProvider], applicationActivities: nil)
+        present(activityViewController, animated: true)
     }
     
     
     
     
+}
+
+
+
+
+class BusinessUrl: UIActivityItemProvider {
+    let sharingURL: URL
+
+    init(url: URL) {
+        self.sharingURL = url
+        super.init(placeholderItem: url)
+    }
+    
+    override var item: Any {
+    }
 }
