@@ -77,11 +77,15 @@ class ViewController: UIViewController {
     
     @objc func handleSegmentChange() {
         if segmentedControl.selectedSegmentIndex == 0 {
-            mapView.alpha = 1
-            tableView.alpha = 0
+            UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
+                self.mapView.alpha = 1
+                self.tableView.alpha = 0
+            }, completion: nil)
         } else {
-            mapView.alpha = 0
-            tableView.alpha = 1
+            UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
+                self.mapView.alpha = 0
+                self.tableView.alpha = 1
+            }, completion: nil)
         }
         saveSelectedSegmentIndex(segmentedControl.selectedSegmentIndex)
     }
