@@ -58,18 +58,18 @@ internal final class RestaurantClusterView: MKMarkerAnnotationView {
             
             // Outer Circle
             UIColor(#colorLiteral(red: 0.2509803922, green: 0, blue: 0.5098039216, alpha: 0.25)).setFill()
-            UIBezierPath(ovalIn: CGRect(x: 0, y: 0, width: 36, height: 36)).fill()
+            UIBezierPath(ovalIn: CGRect(x: 0, y: 0, width: 40, height: 40)).fill()
 
             // Inner Circle
             UIColor(#colorLiteral(red: 0.2509803922, green: 0, blue: 0.5098039216, alpha: 1)).setFill()
-            UIBezierPath(ovalIn: CGRect(x: 5, y: 5, width: 26, height: 26)).fill()
+            UIBezierPath(ovalIn: CGRect(x: 4, y: 4, width: 32, height: 32)).fill()
 
             // Finally draw count text vertically and horizontally centered
             let attributes = [ NSAttributedString.Key.foregroundColor: UIColor.white,
-                               NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 12.0)]
+                               NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 14.0)]
             let text = "\(count)"
             let size = text.size(withAttributes: attributes)
-            let rect = CGRect(x: 18 - size.width / 2, y: 18 - size.height / 2, width: size.width, height: size.height)
+            let rect = CGRect(x: 20 - size.width / 2, y: 20 - size.height / 2, width: size.width, height: size.height)
             text.draw(in: rect, withAttributes: attributes)
         }
     }

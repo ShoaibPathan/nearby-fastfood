@@ -11,12 +11,20 @@ import MapKit
 import CoreLocation
 import Alamofire
 
+// TODO:
+// - zoom into cluster
+// - fix annotation flicker
+
 class ViewController: UIViewController {
     
     deinit { print("ViewController memory being reclaimed...") }
     
-    var businesses = [Business]()
-    
+    var previousBusinesses = [Business]()
+    var businesses = [Business]() {
+        willSet {
+            self.previousBusinesses = self.businesses
+        }
+    }
     private let defaults = UserDefaults.standard
     private let locationManager = CLLocationManager()
     private let initialLocation = CLLocationCoordinate2D(latitude: 40.758896, longitude: -73.985130)
@@ -27,11 +35,18 @@ class ViewController: UIViewController {
         }
     }
     private let regionInMeters: Double = 1000
-    private let regionChangeThreshold: Double = 200
+    private let regionChangeThreshold: Double = 250
     private let searchCategories = "burgers,pizza,mexican,chinese"
     private let sortByCriteria = "distance"
     private var previousLocation: CLLocation?
     private var regionIsCenteredOnUserLocation = false
+    
+    
+    
+    
+    
+    
+    
     
     let feedbackGenerator: UIImpactFeedbackGenerator = {
         let generator = UIImpactFeedbackGenerator(style: .medium)
@@ -99,6 +114,8 @@ class ViewController: UIViewController {
         view.backgroundColor = .white
         navigationItem.title = "Fast Food Places"
         
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
+        
         //[redView, blueView].forEach { view.addSubview($0) }
         view.addSubview(segmentedControl)
         view.insertSubview(mapView, belowSubview: segmentedControl)
@@ -154,6 +171,14 @@ class ViewController: UIViewController {
 // MARK: - TableView Delegate and Datasource
 
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let business = self.businesses[indexPath.row]
+        let detailsController = DetailsController()
+        detailsController.business = business
+        navigationController?.pushViewController(detailsController, animated: true)
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         businesses.count
     }
@@ -193,10 +218,8 @@ extension ViewController: CLLocationManagerDelegate {
     private func fetchBusinesses(latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
         APIService.shared.fetchBusinesses(latitude: latitude, longitude: longitude, radius: regionInMeters, sortBy: sortByCriteria, categories: searchCategories) { [weak self] (businesses) in
             self?.businesses = businesses
-            DispatchQueue.main.async {
-                self?.addAnnotations()
-                self?.tableView.reloadData()
-            }
+            self?.addAnnotations()
+            self?.tableView.reloadData()
         }
     }
     
@@ -228,30 +251,27 @@ extension ViewController: CLLocationManagerDelegate {
         let annotation = MKPointAnnotation()
         annotation.title = name
         annotation.coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-        
         self.mapView.addAnnotation(annotation)
     }
     
     private func addAnnotations() {
+        
+        // Remove Previous Annotations
+        let annotations = mapView.annotations
+        
         businesses.forEach { (business) in
             if let name = business.name,
                 let latitude = business.coordinates?.latitude,
                 let longitude = business.coordinates?.longitude {
-                createAnnotation(name: name, latitude: latitude, longitude: longitude)
+                self.createAnnotation(name: name, latitude: latitude, longitude: longitude)
             }
         }
-        removeAnnotations()
-    }
-    
-    private func removeAnnotations() {
-        let annotations = mapView.annotations
-        mapView.removeAnnotations(annotations)
+        self.mapView.removeAnnotations(annotations)
     }
 
     //MARK: - Delegate Methods
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        
         // Do not center on user location after the initial update
         if !regionIsCenteredOnUserLocation {
             guard let location = locations.last else { return }
@@ -271,7 +291,6 @@ extension ViewController: CLLocationManagerDelegate {
         print("Location Manager Error:", error.localizedDescription)
     }
     
-    
 }
 
 //MARK: - MKMapViewDelegate
@@ -290,17 +309,14 @@ extension ViewController: MKMapViewDelegate {
         if #available(iOS 10,*) {
             feedbackGenerator.impactOccurred()
         }
-        
-        
-        // IF CLUSTER THAN ZOOM IN MAP FOR USER
-        
+//        // zoom into cluster
+//        if view is RestaurantClusterView {
+//            guard let annotation = view.annotation else { return }
+//        }
     }
-    
-    
-    
-    
-    
+
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        
         let latitude = mapView.centerCoordinate.latitude
         let longitude = mapView.centerCoordinate.longitude
         
@@ -308,8 +324,8 @@ extension ViewController: MKMapViewDelegate {
         let center = getCenterLocation(for: mapView)
         guard let previousLocation = previousLocation else { return }
         guard center.distance(from: previousLocation) > regionChangeThreshold else { return }
-        
         self.previousLocation = center
+
         fetchBusinesses(latitude: latitude, longitude: longitude)
     }
     

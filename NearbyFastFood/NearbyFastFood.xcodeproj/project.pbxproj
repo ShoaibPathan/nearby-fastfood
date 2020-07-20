@@ -20,6 +20,7 @@
 		9E2C176124C3BAA400ED4ACC /* RestaurantCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2C175F24C3BAA400ED4ACC /* RestaurantCell.swift */; };
 		9E2C176224C3BAA400ED4ACC /* RestaurantCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9E2C176024C3BAA400ED4ACC /* RestaurantCell.xib */; };
 		9E2C176424C4ABC400ED4ACC /* RestaurantAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2C176324C4ABC400ED4ACC /* RestaurantAnnotationView.swift */; };
+		9E2C176624C530F900ED4ACC /* DetailsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2C176524C530F900ED4ACC /* DetailsController.swift */; };
 		9E80024524C24AFC001A46E3 /* RequestInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E80024424C24AFC001A46E3 /* RequestInterceptor.swift */; };
 		9E80024824C268FF001A46E3 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E80024724C268FF001A46E3 /* APIService.swift */; };
 		9E80024B24C28DD6001A46E3 /* Business.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E80024A24C28DD6001A46E3 /* Business.swift */; };
@@ -43,6 +44,7 @@
 		9E2C175F24C3BAA400ED4ACC /* RestaurantCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantCell.swift; sourceTree = "<group>"; };
 		9E2C176024C3BAA400ED4ACC /* RestaurantCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RestaurantCell.xib; sourceTree = "<group>"; };
 		9E2C176324C4ABC400ED4ACC /* RestaurantAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantAnnotationView.swift; sourceTree = "<group>"; };
+		9E2C176524C530F900ED4ACC /* DetailsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsController.swift; sourceTree = "<group>"; };
 		9E80024424C24AFC001A46E3 /* RequestInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestInterceptor.swift; sourceTree = "<group>"; };
 		9E80024724C268FF001A46E3 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		9E80024A24C28DD6001A46E3 /* Business.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Business.swift; sourceTree = "<group>"; };
@@ -118,6 +120,7 @@
 			isa = PBXGroup;
 			children = (
 				9E24286724C1E24500E663FC /* ViewController.swift */,
+				9E2C176524C530F900ED4ACC /* DetailsController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -286,6 +289,7 @@
 				9E24287A24C1FB1E00E663FC /* Constants.swift in Sources */,
 				9E80024524C24AFC001A46E3 /* RequestInterceptor.swift in Sources */,
 				9E24286824C1E24500E663FC /* ViewController.swift in Sources */,
+				9E2C176624C530F900ED4ACC /* DetailsController.swift in Sources */,
 				9E24286424C1E24500E663FC /* AppDelegate.swift in Sources */,
 				9E24287824C1E65200E663FC /* UIView + Layout.swift in Sources */,
 				9E2C176424C4ABC400ED4ACC /* RestaurantAnnotationView.swift in Sources */,
