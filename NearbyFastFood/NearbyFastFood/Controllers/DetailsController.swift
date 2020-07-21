@@ -132,6 +132,7 @@ class BusinessUrl: UIActivityItemProvider {
         super.init(placeholderItem: url)
     }
     
-    override var item: Any {
-    }
+//    override var item: Any {
+//        //
+//    }
 }

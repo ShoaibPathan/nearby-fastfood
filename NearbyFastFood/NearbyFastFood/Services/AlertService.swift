@@ -19,7 +19,7 @@ class AlertService {
     
     //MARK: - Alert
     
-    static func showLocationServicesOffAlert(on vc: UIViewController) {
+    static func turnOnLocationServicesAlert(on vc: UIViewController) {
         
         let alert = UIAlertController(title: "Location Services Off", message: "Turn on Location Services in Settings > Privacy to allow this app to determine your current location", preferredStyle: .alert)
         

@@ -26,27 +26,22 @@ class ViewController: UIViewController {
         }
     }
     private let defaults = UserDefaults.standard
-    private let locationManager = CLLocationManager()
-    private let initialLocation = CLLocationCoordinate2D(latitude: 40.758896, longitude: -73.985130)
-    private var userLocation: CLLocationCoordinate2D {
-        get {
-            guard let location = locationManager.location?.coordinate else { return initialLocation }
-            return location
-        }
-    }
     private let regionInMeters: Double = 1000
-    private let regionChangeThreshold: Double = 250
+    private let regionChangeThreshold: Double = 200
     private let searchCategories = "burgers,pizza,mexican,chinese"
     private let sortByCriteria = "distance"
     private var previousLocation: CLLocation?
     private var regionIsCenteredOnUserLocation = false
-    
-    
-    
-    
-    
-    
-    
+    private var regionChangedBeyondThreshold: Bool {
+        get {
+            let center = getCenterLocation(for: mapView)
+            guard let previousLocation = previousLocation else { return false }
+            if center.distance(from: previousLocation) > regionChangeThreshold {
+                self.previousLocation = center
+                return true
+            } else { return false }
+        }
+    }
     
     let feedbackGenerator: UIImpactFeedbackGenerator = {
         let generator = UIImpactFeedbackGenerator(style: .medium)
@@ -109,10 +104,15 @@ class ViewController: UIViewController {
         setupViews()
         setupTableView()
         loadLastSelectedSegmentIndex()
-        checkLocationServices()
+        setupLocationService()
     }
     
     //MARK: - Setup
+    
+    private func setupLocationService() {
+        let locationService = LocationService.shared
+        locationService.delegate = self
+    }
     
     private func setupViews() {
         view.backgroundColor = .white
@@ -153,22 +153,6 @@ class ViewController: UIViewController {
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // MARK: - TableView Delegate and Datasource
 
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
@@ -191,61 +175,76 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
+// MARK: - LocationServiceDelegate
 
-// MARK: - CLLocationManagerDelegate
-
-extension ViewController: CLLocationManagerDelegate {
+extension ViewController: LocationServiceDelegate {
     
-    private func setupLocationManager() {
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-    }
-    
-    private func checkLocationServices() {
-        if CLLocationManager.locationServicesEnabled() {
-            setupLocationManager()
-            checkLocationAuthorization()
-        } else {
-            /// - ALERT: "Turn on Location Services"
-            AlertService.showLocationServicesOffAlert(on: self)
+    func didCheckAuthorizationStatus(status: CLAuthorizationStatus) {
+        switch status {
+        case .authorizedWhenInUse, .authorizedAlways:
+            mapView.showsUserLocation = true
+            centreMap(on: LocationService.shared.userLocation)
+        case .denied, .restricted:
+            centreMap(on: LocationService.shared.defaultLocation)
+        default: break
         }
     }
     
-    private func centreMap(on location: CLLocationCoordinate2D) {
-        let region = MKCoordinateRegion.init(center: location, latitudinalMeters: regionInMeters, longitudinalMeters: regionInMeters)
-        mapView.setRegion(region, animated: true)
+    func didUpdateLocation(location: CLLocation) {
+        // Do not center on user location after the initial update
+        if !regionIsCenteredOnUserLocation {
+            let center = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+            let region = createRegion(center: center)
+            mapView.setRegion(region, animated: true)
+            regionIsCenteredOnUserLocation = true
+        }
+        regionIsCenteredOnUserLocation = true
     }
     
+    func turnOnLocationServices() {
+        AlertService.turnOnLocationServicesAlert(on: self)
+    }
+    
+    func didFailWithError(error: Error) {
+        print("Failed to update location:", error)
+    }
+    
+    
+    
+    
+
+    
+    
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// MARK: - Fetch Businesses and Annotations
+
+extension ViewController {
+
     private func fetchBusinesses(latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
         APIService.shared.fetchBusinesses(latitude: latitude, longitude: longitude, radius: regionInMeters, sortBy: sortByCriteria, categories: searchCategories) { [weak self] (businesses) in
             self?.businesses = businesses
             self?.addAnnotations()
             self?.tableView.reloadData()
         }
-    }
-    
-    private func checkLocationAuthorization() {
-        switch CLLocationManager.authorizationStatus() {
-        case .authorizedWhenInUse, .authorizedAlways:
-            startTrackingUserLocation()
-        case .notDetermined:
-            /// Request permission to use location services
-            locationManager.requestWhenInUseAuthorization()
-        case .denied, .restricted:
-            /// - ALERT: "Turn on Location Services"
-            AlertService.showLocationServicesOffAlert(on: self)
-            centreMap(on: initialLocation)
-            previousLocation = getCenterLocation(for: mapView)
-        @unknown default:
-            fatalError("CLAuthorizationStatus is unknown.")
-        }
-    }
-    
-    private func startTrackingUserLocation() {
-        mapView.showsUserLocation = true
-        centreMap(on: userLocation)
-        locationManager.startUpdatingLocation()
-        previousLocation = getCenterLocation(for: mapView)
     }
     
     private func createAnnotation(name: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
@@ -256,10 +255,7 @@ extension ViewController: CLLocationManagerDelegate {
     }
     
     private func addAnnotations() {
-        
-        // Remove Previous Annotations
         let annotations = mapView.annotations
-        
         businesses.forEach { (business) in
             if let name = business.name,
                 let latitude = business.coordinates?.latitude,
@@ -269,40 +265,53 @@ extension ViewController: CLLocationManagerDelegate {
         }
         self.mapView.removeAnnotations(annotations)
     }
-
-    //MARK: - Delegate Methods
-
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        // Do not center on user location after the initial update
-        if !regionIsCenteredOnUserLocation {
-            guard let location = locations.last else { return }
-            let center = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
-            let region = MKCoordinateRegion.init(center: center, latitudinalMeters: regionInMeters, longitudinalMeters: regionInMeters)
-            mapView.setRegion(region, animated: true)
-            regionIsCenteredOnUserLocation = true
-        }
-        regionIsCenteredOnUserLocation = true
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        checkLocationAuthorization()
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("Location Manager Error:", error.localizedDescription)
-    }
-    
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //MARK: - MKMapViewDelegate
 
 extension ViewController: MKMapViewDelegate {
+    
+    private func createRegion(center: CLLocationCoordinate2D) -> MKCoordinateRegion {
+        return MKCoordinateRegion(center: center, latitudinalMeters: regionInMeters, longitudinalMeters: regionInMeters)
+    }
+    
+    private func centreMap(on location: CLLocationCoordinate2D) {
+        let region = createRegion(center: location)
+        mapView.setRegion(region, animated: true)
+        previousLocation = getCenterLocation(for: mapView)
+    }
     
     private func getCenterLocation(for mapView: MKMapView) -> CLLocation {
         let latitude = mapView.centerCoordinate.latitude
         let longitude = mapView.centerCoordinate.longitude
         return CLLocation(latitude: latitude, longitude: longitude)
     }
+    
+    
+    
+    
     
     //MARK: - Delegate Methods
     
@@ -317,17 +326,11 @@ extension ViewController: MKMapViewDelegate {
     }
 
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        
-        let latitude = mapView.centerCoordinate.latitude
-        let longitude = mapView.centerCoordinate.longitude
-        
-        // Check if region has changed more than threshold
-        let center = getCenterLocation(for: mapView)
-        guard let previousLocation = previousLocation else { return }
-        guard center.distance(from: previousLocation) > regionChangeThreshold else { return }
-        self.previousLocation = center
-
-        fetchBusinesses(latitude: latitude, longitude: longitude)
+        let lat = mapView.centerCoordinate.latitude
+        let lon = mapView.centerCoordinate.longitude
+        if regionChangedBeyondThreshold {
+            fetchBusinesses(latitude: lat, longitude: lon)
+        }
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
@@ -344,5 +347,3 @@ extension ViewController: MKMapViewDelegate {
     }
     
 }
-
-

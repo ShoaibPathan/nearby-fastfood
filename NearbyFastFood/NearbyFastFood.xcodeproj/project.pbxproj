@@ -27,6 +27,8 @@
 		9E80024524C24AFC001A46E3 /* RequestInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E80024424C24AFC001A46E3 /* RequestInterceptor.swift */; };
 		9E80024824C268FF001A46E3 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E80024724C268FF001A46E3 /* APIService.swift */; };
 		9E80024B24C28DD6001A46E3 /* Business.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E80024A24C28DD6001A46E3 /* Business.swift */; };
+		9E91D2BE24C67DBF0082644E /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E91D2BD24C67DBF0082644E /* LocationService.swift */; };
+		9E91D2C024C71FB60082644E /* old.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E91D2BF24C71FB60082644E /* old.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +56,8 @@
 		9E80024424C24AFC001A46E3 /* RequestInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestInterceptor.swift; sourceTree = "<group>"; };
 		9E80024724C268FF001A46E3 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		9E80024A24C28DD6001A46E3 /* Business.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Business.swift; sourceTree = "<group>"; };
+		9E91D2BD24C67DBF0082644E /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
+		9E91D2BF24C71FB60082644E /* old.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = old.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +103,7 @@
 			children = (
 				9E24286324C1E24500E663FC /* AppDelegate.swift */,
 				9E24286524C1E24500E663FC /* SceneDelegate.swift */,
+				9E80024C24C28DDB001A46E3 /* Model */,
 				9E2C175E24C3BA4D00ED4ACC /* Views */,
 				9E2C175B24C3B9CC00ED4ACC /* Controllers */,
 				9E24286924C1E24500E663FC /* Main.storyboard */,
@@ -109,7 +114,6 @@
 				9E80024924C289A8001A46E3 /* Constants */,
 				9E24287D24C202EF00E663FC /* Services */,
 				9E80024624C24C93001A46E3 /* Alamofire */,
-				9E80024C24C28DDB001A46E3 /* Model */,
 			);
 			path = NearbyFastFood;
 			sourceTree = "<group>";
@@ -125,6 +129,7 @@
 		9E2C175B24C3B9CC00ED4ACC /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				9E91D2BF24C71FB60082644E /* old.swift */,
 				9E24286724C1E24500E663FC /* ViewController.swift */,
 				9E2C176524C530F900ED4ACC /* DetailsController.swift */,
 			);
@@ -157,6 +162,7 @@
 			children = (
 				9E80024724C268FF001A46E3 /* APIService.swift */,
 				9E80024424C24AFC001A46E3 /* RequestInterceptor.swift */,
+				9E91D2BD24C67DBF0082644E /* LocationService.swift */,
 			);
 			path = Alamofire;
 			sourceTree = "<group>";
@@ -312,7 +318,9 @@
 				9E24286424C1E24500E663FC /* AppDelegate.swift in Sources */,
 				9E24287824C1E65200E663FC /* UIView + Layout.swift in Sources */,
 				9E2C176424C4ABC400ED4ACC /* RestaurantAnnotationView.swift in Sources */,
+				9E91D2BE24C67DBF0082644E /* LocationService.swift in Sources */,
 				9E24287C24C201FD00E663FC /* AlertService.swift in Sources */,
+				9E91D2C024C71FB60082644E /* old.swift in Sources */,
 				9E80024B24C28DD6001A46E3 /* Business.swift in Sources */,
 				9E80024824C268FF001A46E3 /* APIService.swift in Sources */,
 				9E24286624C1E24500E663FC /* SceneDelegate.swift in Sources */,
