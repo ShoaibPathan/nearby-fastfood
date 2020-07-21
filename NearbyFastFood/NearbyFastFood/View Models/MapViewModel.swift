@@ -10,13 +10,18 @@ import MapKit
 
 class MapViewModel: NSObject {
     
-    func createAnnotation(business: Business) {
+    func createAnnotation(on mapView: MKMapView, business: Business) {
         let annotation = MKPointAnnotation()
         annotation.title = business.name
         if let lat = business.coordinates?.latitude, let lon = business.coordinates?.longitude {
             annotation.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
         }
-        self.mapView.addAnnotation(annotation)
+        mapView.addAnnotation(annotation)
+    }
+    
+    func createLocation(business: Business) -> CLLocationCoordinate2D? {
+        guard let lat = business.coordinates?.latitude, let lon = business.coordinates?.longitude else { return nil }
+        return CLLocationCoordinate2D(latitude: lat, longitude: lon)
     }
     
 }

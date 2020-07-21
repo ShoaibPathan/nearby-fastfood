@@ -48,4 +48,13 @@ extension UIView {
         }
     }
     
+    func center(to view: UIView, xAnchor: Bool = true, yAnchor: Bool = true) {
+        if xAnchor {
+            centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        }
+        if yAnchor {
+            centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        }
+    }
+
 }

@@ -13,15 +13,25 @@ class DetailsController: UIViewController {
     
     deinit { print("DetailsController memory being reclaimed...") }
     
+    let mapViewModel = MapViewModel()
+    var directionsArray: [MKDirections] = []
+    
     var business: Business! {
         didSet {
             guard let url = URL(string: business.imageUrl ?? "") else { return }
             restaurantImageView.load(url: url)
             nameLabel.text = business?.name
+            mapViewModel.createAnnotation(on: self.mapView, business: self.business)
         }
     }
-    
-    var businessLocation: CLLocationCoordinate2D!
+    var businessLocation: CLLocationCoordinate2D! {
+        return mapViewModel.createLocation(business: business)
+    }
+    var expectedTravelTime: TimeInterval? {
+        didSet {
+            expectedTravelTimeLabel.text = expectedTravelTime?.toDisplayString()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,10 +42,7 @@ class DetailsController: UIViewController {
         getDirections()
     }
     
-    private func setupLocationService() {
-        let locationService = LocationService.shared
-        locationService.delegate = self
-    }
+    // MARK: - Subviews
     
     let restaurantImageView: UIImageView = {
         let imageView = UIImageView()
@@ -76,12 +83,31 @@ class DetailsController: UIViewController {
         stackView.spacing = 24
         return stackView
     }()
+    
+    let expectedTravelTimeLabel: UILabel = {
+        let label = InsetsLabel(withInsets: 6, 8, 6, 8)
+        label.backgroundColor = #colorLiteral(red: 0.8431372549, green: 0.2196078431, blue: 0.368627451, alpha: 0.85) // 85%
+        label.textColor = .white
+        label.textAlignment = .center
+        label.font = UIFont.boldSystemFont(ofSize: 12.0)
+        return label
+    }()
+    
+    // MARK: - Setup
+    
+    private func setupLocationService() {
+        let locationService = LocationService.shared
+        locationService.delegate = self
+    }
 
     private func setupViews() {
         view.backgroundColor = .white
         navigationItem.title = "Details"
         [restaurantImageView, nameLabel, stackView].forEach { view.addSubview($0) }
         [mapView, callButton].forEach { stackView.addArrangedSubview($0) }
+        
+        view.insertSubview(expectedTravelTimeLabel, aboveSubview: mapView)
+        
         setupLayouts()
     }
     
@@ -92,6 +118,9 @@ class DetailsController: UIViewController {
         stackView.anchor(top: nil, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor)
         mapView.anchor(top: restaurantImageView.bottomAnchor, leading: stackView.leadingAnchor, bottom: nil, trailing: stackView.trailingAnchor, padding: .init(top: 16, left: 16, bottom: 0, right: 16))
         callButton.anchor(top: nil, leading: stackView.leadingAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, trailing: stackView.trailingAnchor, padding: .init(top: 0, left: 16, bottom: 16, right: 16), size: .init(width: 0, height: 48.0))
+        
+        expectedTravelTimeLabel.anchor(top: mapView.topAnchor, leading: nil, bottom: nil, trailing: nil, padding: .init(top: 16, left: 0, bottom: 0, right: 0))
+        expectedTravelTimeLabel.center(to: view, xAnchor: true, yAnchor: false)
     }
     
     fileprivate func setupNavigationBarButtons() {
@@ -125,6 +154,8 @@ class DetailsController: UIViewController {
         
         let request = createDirectionsRequest(from: userLocation)
         let directions = MKDirections(request: request)
+        resetMapView(withNew: directions)
+        
         directions.calculate { [unowned self] (response, error) in
             if error != nil {
                 print("Failed to calculate directions")
@@ -134,12 +165,14 @@ class DetailsController: UIViewController {
                     return
                 }
                 for route in response.routes {
+                    //let steps = route.steps
+                    self.expectedTravelTime = route.expectedTravelTime
+                    
                     self.mapView.addOverlay(route.polyline)
                     self.mapView.setVisibleMapRect(route.polyline.boundingMapRect, animated: true)
                 }
             }
         }
-        
     }
     
     func createDirectionsRequest(from coordinate: CLLocationCoordinate2D) -> MKDirections.Request {
@@ -153,6 +186,14 @@ class DetailsController: UIViewController {
         request.requestsAlternateRoutes = true
         return request
     }
+    
+    func resetMapView(withNew directions: MKDirections) {
+        mapView.removeOverlays(mapView.overlays)
+        directionsArray.append(directions)
+        let _ = directionsArray.map{ $0.cancel() }
+        self.directionsArray = []
+    }
+    
 }
 
 

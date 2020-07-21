@@ -43,6 +43,8 @@ class ViewController: UIViewController {
         }
     }
     
+    var mapViewModel = MapViewModel()
+    
     let feedbackGenerator: UIImpactFeedbackGenerator = {
         let generator = UIImpactFeedbackGenerator(style: .medium)
         generator.prepare()
@@ -159,10 +161,8 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let business = self.businesses[indexPath.row]
-        let businessLocation = createLocation(business: business)
         let detailsController = DetailsController()
         detailsController.business = business
-        detailsController.businessLocation = businessLocation
         navigationController?.pushViewController(detailsController, animated: true)
     }
     
@@ -242,31 +242,13 @@ extension ViewController {
         }
     }
     
-    private func createLocation(business: Business) -> CLLocationCoordinate2D? {
-        guard let lat = business.coordinates?.latitude, let lon = business.coordinates?.longitude else { return nil }
-            return CLLocationCoordinate2D(latitude: lat, longitude: lon)
-    }
-
-    private func createAnnotation(business: Business) {
-        let annotation = MKPointAnnotation()
-        annotation.title = business.name
-        if let lat = business.coordinates?.latitude, let lon = business.coordinates?.longitude {
-            annotation.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
-        }
-        self.mapView.addAnnotation(annotation)
-    }
-    
     private func addAnnotations() {
         let previousAnnotations = mapView.annotations
         businesses.forEach { (business) in
-            createAnnotation(business: business)
+            mapViewModel.createAnnotation(on: self.mapView, business: business)
         }
         self.mapView.removeAnnotations(previousAnnotations)
     }
-    
-    
-    
-    
 }
 
 

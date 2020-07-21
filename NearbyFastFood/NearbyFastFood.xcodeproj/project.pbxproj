@@ -30,6 +30,7 @@
 		9E91D2BE24C67DBF0082644E /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E91D2BD24C67DBF0082644E /* LocationService.swift */; };
 		9E91D2C024C71FB60082644E /* old.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E91D2BF24C71FB60082644E /* old.swift */; };
 		9EDBDA4B24C75E5300C803A6 /* MapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EDBDA4A24C75E5300C803A6 /* MapViewModel.swift */; };
+		9EDBDA4E24C76BAC00C803A6 /* Time + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EDBDA4D24C76BAC00C803A6 /* Time + Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,6 +61,7 @@
 		9E91D2BD24C67DBF0082644E /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		9E91D2BF24C71FB60082644E /* old.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = old.swift; sourceTree = "<group>"; };
 		9EDBDA4A24C75E5300C803A6 /* MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModel.swift; sourceTree = "<group>"; };
+		9EDBDA4D24C76BAC00C803A6 /* Time + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Time + Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +109,7 @@
 				9E24286524C1E24500E663FC /* SceneDelegate.swift */,
 				9E80024C24C28DDB001A46E3 /* Model */,
 				9E2C175E24C3BA4D00ED4ACC /* Views */,
+				9EDBDA4C24C761DC00C803A6 /* View Models */,
 				9E2C175B24C3B9CC00ED4ACC /* Controllers */,
 				9E24286924C1E24500E663FC /* Main.storyboard */,
 				9E24286C24C1E24900E663FC /* Assets.xcassets */,
@@ -134,7 +137,6 @@
 				9E91D2BF24C71FB60082644E /* old.swift */,
 				9E24286724C1E24500E663FC /* ViewController.swift */,
 				9E2C176524C530F900ED4ACC /* DetailsController.swift */,
-				9EDBDA4A24C75E5300C803A6 /* MapViewModel.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -156,6 +158,7 @@
 			children = (
 				9E24287724C1E65200E663FC /* UIView + Layout.swift */,
 				9E2C176C24C54F7E00ED4ACC /* UIImageView + Extensions.swift */,
+				9EDBDA4D24C76BAC00C803A6 /* Time + Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -184,6 +187,14 @@
 				9E80024A24C28DD6001A46E3 /* Business.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		9EDBDA4C24C761DC00C803A6 /* View Models */ = {
+			isa = PBXGroup;
+			children = (
+				9EDBDA4A24C75E5300C803A6 /* MapViewModel.swift */,
+			);
+			path = "View Models";
 			sourceTree = "<group>";
 		};
 		ACF06869AD2FF93F9B721D3D /* Pods */ = {
@@ -328,6 +339,7 @@
 				9E80024824C268FF001A46E3 /* APIService.swift in Sources */,
 				9E24286624C1E24500E663FC /* SceneDelegate.swift in Sources */,
 				9E2C176B24C546CE00ED4ACC /* InsetsLabel.swift in Sources */,
+				9EDBDA4E24C76BAC00C803A6 /* Time + Extensions.swift in Sources */,
 				9EDBDA4B24C75E5300C803A6 /* MapViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
