@@ -21,16 +21,20 @@ class DetailsController: UIViewController {
         }
     }
     
-    var businessLocation: CLLocationCoordinate2D! {
-        didSet {
-            centreMap(on: businessLocation)
-        }
-    }
+    var businessLocation: CLLocationCoordinate2D!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
         setupNavigationBarButtons()
+        setupMapView()
+        setupLocationService()
+        getDirections()
+    }
+    
+    private func setupLocationService() {
+        let locationService = LocationService.shared
+        locationService.delegate = self
     }
     
     let restaurantImageView: UIImageView = {
@@ -103,7 +107,71 @@ class DetailsController: UIViewController {
             present(activityViewController, animated: true)
         }
     }
+    
+    private func setupMapView() {
+        mapView.showsUserLocation = true
+        mapView.delegate = self
+        mapView.pointOfInterestFilter = MKPointOfInterestFilter(excluding: [MKPointOfInterestCategory.restaurant])
+        mapView.register(RestaurantAnnotationView.self, forAnnotationViewWithReuseIdentifier: RestaurantAnnotationView.reuseIdentifier)
+    }
+    
+    // MARK: - Directions
+    
+    func getDirections() {
+        guard let userLocation = LocationService.shared.userLocation else {
+            AlertService.showLocationServicesAlert(on: self)
+            return
+        }
+        
+        let request = createDirectionsRequest(from: userLocation)
+        let directions = MKDirections(request: request)
+        directions.calculate { [unowned self] (response, error) in
+            if error != nil {
+                print("Failed to calculate directions")
+            } else {
+                guard let response = response else {
+                    AlertService.showDirectionsNotAavailableAlert(on: self)
+                    return
+                }
+                for route in response.routes {
+                    self.mapView.addOverlay(route.polyline)
+                    self.mapView.setVisibleMapRect(route.polyline.boundingMapRect, animated: true)
+                }
+            }
+        }
+        
+    }
+    
+    func createDirectionsRequest(from coordinate: CLLocationCoordinate2D) -> MKDirections.Request {
+        let startingLocation = MKPlacemark(coordinate: coordinate)
+        let destination = MKPlacemark(coordinate: businessLocation)
+        
+        let request = MKDirections.Request()
+        request.source = MKMapItem(placemark: startingLocation)
+        request.destination = MKMapItem(placemark: destination)
+        request.transportType = .automobile
+        request.requestsAlternateRoutes = true
+        return request
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //class BusinessUrl: UIActivityItemProvider {
 //    let sharingURL: URL
@@ -117,17 +185,41 @@ class DetailsController: UIViewController {
 //    }
 //}
 
+extension DetailsController: LocationServiceDelegate {
+    func didCheckAuthorizationStatus(status: CLAuthorizationStatus) {
+    }
+    
+    func didUpdateLocation(location: CLLocation) {
+    }
+    
+    func turnOnLocationServices() {
+        AlertService.showLocationServicesAlert(on: self)
+    }
+    
+    func didFailWithError(error: Error) {
+        print("Failed to update location:", error)
+    }
+}
 
+
+// MARK: - MKMapViewDelegate
 
 extension DetailsController: MKMapViewDelegate {
-    
-    //Map style:
-    //Directions line color and width: blu cepheus, 4 points
-    //Map should show driving directions from user’s location to place location using MapKit API
-
     private func centreMap(on location: CLLocationCoordinate2D) {
         let region = MKCoordinateRegion(center: location, latitudinalMeters: LocationService.shared.regionInMeters, longitudinalMeters: LocationService.shared.regionInMeters)
         mapView.setRegion(region, animated: true)
     }
-        
+    
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        let renderer = MKPolylineRenderer(overlay: overlay as! MKPolyline)
+        renderer.strokeColor = #colorLiteral(red: 0.05882352941, green: 0.737254902, blue: 0.9764705882, alpha: 1)
+        renderer.lineWidth = 4.0
+        return renderer
+    }
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        if annotation is MKUserLocation { return nil }
+        guard let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: RestaurantAnnotationView.reuseIdentifier) as? RestaurantAnnotationView else { fatalError() }
+        return annotationView
+    }
 }

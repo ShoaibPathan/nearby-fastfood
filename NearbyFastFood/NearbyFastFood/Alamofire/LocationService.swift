@@ -26,9 +26,9 @@ class LocationService: NSObject, CLLocationManagerDelegate {
     var locationManager: CLLocationManager!
     private var lastLocation: CLLocation?
     public var defaultLocation = CLLocationCoordinate2D(latitude: 40.758896, longitude: -73.985130)
-    public var userLocation: CLLocationCoordinate2D {
+    public var userLocation: CLLocationCoordinate2D? {
         get {
-            guard let location = locationManager.location?.coordinate else { return defaultLocation }
+            guard let location = locationManager.location?.coordinate else { return nil }
             return location
         }
     }

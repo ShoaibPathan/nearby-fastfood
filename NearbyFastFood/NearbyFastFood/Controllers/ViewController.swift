@@ -160,15 +160,9 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let business = self.businesses[indexPath.row]
         let businessLocation = createLocation(business: business)
-        
-        
         let detailsController = DetailsController()
         detailsController.business = business
         detailsController.businessLocation = businessLocation
-        
-        
-        
-        
         navigationController?.pushViewController(detailsController, animated: true)
     }
     
@@ -191,7 +185,8 @@ extension ViewController: LocationServiceDelegate {
         switch status {
         case .authorizedWhenInUse, .authorizedAlways:
             mapView.showsUserLocation = true
-            centreMap(on: LocationService.shared.userLocation)
+            guard let userLocation = LocationService.shared.userLocation else { return }
+            centreMap(on: userLocation)
         case .denied, .restricted:
             centreMap(on: LocationService.shared.defaultLocation)
         default: break
@@ -210,7 +205,7 @@ extension ViewController: LocationServiceDelegate {
     }
     
     func turnOnLocationServices() {
-        AlertService.turnOnLocationServicesAlert(on: self)
+        AlertService.showLocationServicesAlert(on: self)
     }
     
     func didFailWithError(error: Error) {
@@ -268,6 +263,10 @@ extension ViewController {
         }
         self.mapView.removeAnnotations(previousAnnotations)
     }
+    
+    
+    
+    
 }
 
 
