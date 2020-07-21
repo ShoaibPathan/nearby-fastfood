@@ -26,7 +26,7 @@ class ViewController: UIViewController {
         }
     }
     private let defaults = UserDefaults.standard
-    private let regionInMeters: Double = 1000
+//    private let regionInMeters: Double = 1000
     private let regionChangeThreshold: Double = 200
     private let searchCategories = "burgers,pizza,mexican,chinese"
     private let sortByCriteria = "distance"
@@ -159,8 +159,16 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let business = self.businesses[indexPath.row]
+        let businessLocation = createLocation(business: business)
+        
+        
         let detailsController = DetailsController()
         detailsController.business = business
+        detailsController.businessLocation = businessLocation
+        
+        
+        
+        
         navigationController?.pushViewController(detailsController, animated: true)
     }
     
@@ -208,14 +216,6 @@ extension ViewController: LocationServiceDelegate {
     func didFailWithError(error: Error) {
         print("Failed to update location:", error)
     }
-    
-    
-    
-    
-
-    
-    
-    
 }
 
 
@@ -240,30 +240,33 @@ extension ViewController: LocationServiceDelegate {
 extension ViewController {
 
     private func fetchBusinesses(latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
-        APIService.shared.fetchBusinesses(latitude: latitude, longitude: longitude, radius: regionInMeters, sortBy: sortByCriteria, categories: searchCategories) { [weak self] (businesses) in
+        APIService.shared.fetchBusinesses(latitude: latitude, longitude: longitude, radius: LocationService.shared.regionInMeters, sortBy: sortByCriteria, categories: searchCategories) { [weak self] (businesses) in
             self?.businesses = businesses
             self?.addAnnotations()
             self?.tableView.reloadData()
         }
     }
     
-    private func createAnnotation(name: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
+    private func createLocation(business: Business) -> CLLocationCoordinate2D? {
+        guard let lat = business.coordinates?.latitude, let lon = business.coordinates?.longitude else { return nil }
+            return CLLocationCoordinate2D(latitude: lat, longitude: lon)
+    }
+
+    private func createAnnotation(business: Business) {
         let annotation = MKPointAnnotation()
-        annotation.title = name
-        annotation.coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        annotation.title = business.name
+        if let lat = business.coordinates?.latitude, let lon = business.coordinates?.longitude {
+            annotation.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
+        }
         self.mapView.addAnnotation(annotation)
     }
     
     private func addAnnotations() {
-        let annotations = mapView.annotations
+        let previousAnnotations = mapView.annotations
         businesses.forEach { (business) in
-            if let name = business.name,
-                let latitude = business.coordinates?.latitude,
-                let longitude = business.coordinates?.longitude {
-                self.createAnnotation(name: name, latitude: latitude, longitude: longitude)
-            }
+            createAnnotation(business: business)
         }
-        self.mapView.removeAnnotations(annotations)
+        self.mapView.removeAnnotations(previousAnnotations)
     }
 }
 
@@ -294,7 +297,7 @@ extension ViewController {
 extension ViewController: MKMapViewDelegate {
     
     private func createRegion(center: CLLocationCoordinate2D) -> MKCoordinateRegion {
-        return MKCoordinateRegion(center: center, latitudinalMeters: regionInMeters, longitudinalMeters: regionInMeters)
+        return MKCoordinateRegion(center: center, latitudinalMeters: LocationService.shared.regionInMeters, longitudinalMeters: LocationService.shared.regionInMeters)
     }
     
     private func centreMap(on location: CLLocationCoordinate2D) {

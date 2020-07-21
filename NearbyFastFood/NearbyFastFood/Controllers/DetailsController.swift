@@ -21,6 +21,12 @@ class DetailsController: UIViewController {
         }
     }
     
+    var businessLocation: CLLocationCoordinate2D! {
+        didSet {
+            centreMap(on: businessLocation)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
@@ -106,33 +112,33 @@ class DetailsController: UIViewController {
     }
     
     @objc func handleShareButton() {
-        
-        
-        
         guard let url = business.url else { return }
-        let urlToShare = URL(string: url)!
-        let sharingActivityItemProvider = BusinessUrl(url: urlToShare)
-        let activityViewController = UIActivityViewController(activityItems: [sharingActivityItemProvider], applicationActivities: nil)
-        present(activityViewController, animated: true)
+        if let urlToShare = URL(string: url) {
+            let activityViewController = UIActivityViewController(activityItems: [urlToShare], applicationActivities: nil)
+            present(activityViewController, animated: true)
+        }
     }
-    
-    
-    
-    
 }
 
-
-
-
-class BusinessUrl: UIActivityItemProvider {
-    let sharingURL: URL
-
-    init(url: URL) {
-        self.sharingURL = url
-        super.init(placeholderItem: url)
-    }
-    
-//    override var item: Any {
-//        //
+//class BusinessUrl: UIActivityItemProvider {
+//    let sharingURL: URL
+//    private var semaphore: DispatchSemaphore
+//    init(url: URL) {
+//        self.sharingURL = url
+//        super.init(placeholderItem: url)
 //    }
+//
+//    override var item: Any {
+//    }
+//}
+
+
+
+extension DetailsController: MKMapViewDelegate {
+
+    private func centreMap(on location: CLLocationCoordinate2D) {
+        let region = MKCoordinateRegion(center: location, latitudinalMeters: LocationService.shared.regionInMeters, longitudinalMeters: LocationService.shared.regionInMeters)
+        mapView.setRegion(region, animated: true)
+    }
+        
 }

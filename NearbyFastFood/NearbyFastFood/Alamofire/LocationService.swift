@@ -32,6 +32,7 @@ class LocationService: NSObject, CLLocationManagerDelegate {
             return location
         }
     }
+    public let regionInMeters: Double = 1000
     
     override init() {
         super.init()
@@ -92,7 +93,7 @@ class LocationService: NSObject, CLLocationManagerDelegate {
     }
     
     // MARK: - Private Functions
-    
+
     func startUpdatingLocation() {
         print("Starting Location Updates")
         locationManager.startUpdatingLocation()
