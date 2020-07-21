@@ -76,34 +76,19 @@ class DetailsController: UIViewController {
     private func setupViews() {
         view.backgroundColor = .white
         navigationItem.title = "Details"
-        [mapView, callButton].forEach { stackView.addArrangedSubview($0) }
         [restaurantImageView, nameLabel, stackView].forEach { view.addSubview($0) }
+        [mapView, callButton].forEach { stackView.addArrangedSubview($0) }
         setupLayouts()
     }
     
     private func setupLayouts() {
-        restaurantImageView.anchor(top: view.safeAreaLayoutGuide.topAnchor, leading: view.leadingAnchor, bottom: stackView.topAnchor, trailing: view.trailingAnchor)
+        restaurantImageView.anchor(top: view.safeAreaLayoutGuide.topAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor)
         restaurantImageView.heightAnchor.constraint(equalTo: restaurantImageView.widthAnchor, multiplier: 9/16).isActive = true
         nameLabel.anchor(top: nil, leading: view.leadingAnchor, bottom: restaurantImageView.bottomAnchor, trailing: view.trailingAnchor)
-        stackView.anchor(top: restaurantImageView.bottomAnchor, leading: view.leadingAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, trailing: view.trailingAnchor)
-        mapView.anchor(top: stackView.topAnchor, leading: stackView.leadingAnchor, bottom: nil, trailing: stackView.trailingAnchor, padding: .init(top: 16, left: 16, bottom: 0, right: 16))
+        stackView.anchor(top: nil, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor)
+        mapView.anchor(top: restaurantImageView.bottomAnchor, leading: stackView.leadingAnchor, bottom: nil, trailing: stackView.trailingAnchor, padding: .init(top: 16, left: 16, bottom: 0, right: 16))
         callButton.anchor(top: nil, leading: stackView.leadingAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, trailing: stackView.trailingAnchor, padding: .init(top: 0, left: 16, bottom: 16, right: 16), size: .init(width: 0, height: 48.0))
     }
-    
-
-
-//Map style:
-//Directions line color and width: blu cepheus, 4 points
-//Map should show driving directions from user’s location to place location using MapKit API
-    
-
-    
-    
-    
-    
-    
-    
-    
     
     fileprivate func setupNavigationBarButtons() {
         navigationItem.rightBarButtonItems = [
@@ -135,6 +120,10 @@ class DetailsController: UIViewController {
 
 
 extension DetailsController: MKMapViewDelegate {
+    
+    //Map style:
+    //Directions line color and width: blu cepheus, 4 points
+    //Map should show driving directions from user’s location to place location using MapKit API
 
     private func centreMap(on location: CLLocationCoordinate2D) {
         let region = MKCoordinateRegion(center: location, latitudinalMeters: LocationService.shared.regionInMeters, longitudinalMeters: LocationService.shared.regionInMeters)
