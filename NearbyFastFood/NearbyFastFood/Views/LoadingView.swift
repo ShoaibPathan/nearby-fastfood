@@ -8,16 +8,16 @@
 
 import UIKit
 
-class LoadingViewController: UIViewController {
+class LoadingView: UIView {
     
     let activityIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .medium)
         indicator.hidesWhenStopped = true
         return indicator
     }()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         setupView()
     }
     
@@ -26,9 +26,9 @@ class LoadingViewController: UIViewController {
     }
     
     private func setupView() {
-        view.backgroundColor = .white
-        view.addSubview(activityIndicator)
-        activityIndicator.center(in: view, xAnchor: true, yAnchor: true)
+        backgroundColor = .white
+        addSubview(activityIndicator)
+        activityIndicator.fillSuperview()
         activityIndicator.startAnimating()
     }
 

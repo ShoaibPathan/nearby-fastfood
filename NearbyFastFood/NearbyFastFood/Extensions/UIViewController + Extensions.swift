@@ -13,14 +13,9 @@ var storedLoadingView: UIView?
 extension UIViewController {
     
     func showLoadingIndicator(on view: UIView) {
-        let loadingView = UIView(frame: view.bounds)
-        loadingView.backgroundColor = .white
-        let activityIndicator = UIActivityIndicatorView(style: .medium)
-        activityIndicator.startAnimating()
-        activityIndicator.center = loadingView.center
-
+        let loadingView = LoadingView()
+        loadingView.frame = view.bounds
         DispatchQueue.main.async {
-            loadingView.addSubview(activityIndicator)
             view.addSubview(loadingView)
         }
         storedLoadingView = loadingView

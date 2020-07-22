@@ -94,14 +94,12 @@ class ViewController: UIViewController {
     }
     
     //MARK: - Lifecycles
-    
-    override func loadView() {
-        super.loadView()
-        showLoadingIndicator(on: self.view)
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        showLoadingIndicator(on: view)
+        
         setupMapView()
         setupViews()
         setupTableView()
@@ -121,18 +119,13 @@ class ViewController: UIViewController {
         navigationItem.title = "Fast Food Places"
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
         view.addSubview(segmentedControl)
-        view.insertSubview(mapView, belowSubview: segmentedControl)
-        view.insertSubview(tableView, belowSubview: mapView)
+        [mapView, tableView].forEach { view.insertSubview($0, belowSubview: segmentedControl)}
         setupLayouts()
     }
     
     private func setupLayouts() {
-        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
-        segmentedControl.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        segmentedControl.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24).isActive = true        
-        segmentedControl.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 72).isActive = true
-        segmentedControl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -72).isActive = true
-        
+        segmentedControl.center(in: view, xAnchor: true, yAnchor: false)
+        segmentedControl.anchor(top: view.safeAreaLayoutGuide.topAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor, padding: .init(top: 24, left: 72, bottom: 0, right: 72))
         mapView.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor)
         tableView.anchor(top: segmentedControl.bottomAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor, padding: .init(top: 24, left: 0, bottom: 0, right: 0))
     }
@@ -162,8 +155,6 @@ extension ViewController {
         APIService.shared.fetchBusinesses(latitude: latitude, longitude: longitude, radius: LocationService.shared.regionInMeters, sortBy: sortByCriteria, categories: searchCategories) { [weak self] (businesses) in
             
             self?.removeLoadingIndicator()
-            
-            
             
             self?.businesses = businesses
             self?.addAnnotations()
