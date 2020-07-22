@@ -57,11 +57,6 @@ class ViewController: UIViewController {
         return sc
     }()
     
-    let loadingView: LoadingView = {
-        let view = LoadingView()
-        return view
-    }()
-    
     let mapView: MKMapView = {
         let map = MKMapView()
         return map
@@ -99,6 +94,11 @@ class ViewController: UIViewController {
     }
     
     //MARK: - Lifecycles
+    
+    override func loadView() {
+        super.loadView()
+        showLoadingIndicator(on: self.view)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -108,7 +108,7 @@ class ViewController: UIViewController {
         loadLastSelectedSegmentIndex()
         setupLocationService()
     }
-    
+
     //MARK: - Setup
     
     private func setupLocationService() {
@@ -123,18 +123,10 @@ class ViewController: UIViewController {
         view.addSubview(segmentedControl)
         view.insertSubview(mapView, belowSubview: segmentedControl)
         view.insertSubview(tableView, belowSubview: mapView)
-
-        
-        
-        
-        view.addSubview(loadingView)
         setupLayouts()
     }
     
     private func setupLayouts() {
-        
-        loadingView.fillSuperview()
-        
         segmentedControl.translatesAutoresizingMaskIntoConstraints = false
         segmentedControl.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         segmentedControl.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24).isActive = true        
@@ -167,13 +159,12 @@ class ViewController: UIViewController {
 
 extension ViewController {
     private func fetchBusinesses(latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
-        
         APIService.shared.fetchBusinesses(latitude: latitude, longitude: longitude, radius: LocationService.shared.regionInMeters, sortBy: sortByCriteria, categories: searchCategories) { [weak self] (businesses) in
-                        
-            UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
-                self?.loadingView.alpha = 0
-            }, completion: nil)
-
+            
+            self?.removeLoadingIndicator()
+            
+            
+            
             self?.businesses = businesses
             self?.addAnnotations()
             self?.tableView.reloadData()

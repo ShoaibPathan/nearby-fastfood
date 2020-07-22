@@ -49,7 +49,7 @@ extension UIView {
         
     }
     
-    func center(to view: UIView, xAnchor: Bool = true, yAnchor: Bool = true) {
+    func center(in view: UIView, xAnchor: Bool = true, yAnchor: Bool = true) {
         
         translatesAutoresizingMaskIntoConstraints = false
         

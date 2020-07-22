@@ -36,10 +36,11 @@ class DetailsController: UIViewController {
     
     var business: Business! {
         didSet {
+            centreMap(on: businessLocation)
             guard let url = URL(string: business.imageUrl ?? "") else { return }
             restaurantImageView.load(url: url)
             nameLabel.text = business?.name
-            mapViewModel.createAnnotation(on: self.mapView, business: self.business)
+            getDirections()
         }
     }
     var businessLocation: CLLocationCoordinate2D! {
@@ -52,13 +53,14 @@ class DetailsController: UIViewController {
         }
     }
     
+    // MARK: - Lifecycles
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
         setupNavigationBarButtons()
         setupMapView()
         setupLocationService()
-        getDirections()
     }
     
     // MARK: - Subviews
@@ -166,9 +168,9 @@ class DetailsController: UIViewController {
         callButton.anchor(top: nil, leading: stackView.leadingAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, trailing: stackView.trailingAnchor, padding: .init(top: 0, left: 16, bottom: 16, right: 16), size: .init(width: 0, height: 48.0))
         
         expectedTravelTimeLabel.anchor(top: nil, leading: nil, bottom: mapView.bottomAnchor, trailing: nil, padding: .init(top: 0, left: 0, bottom: 16, right: 0))
-        expectedTravelTimeLabel.center(to: mapView, xAnchor: true, yAnchor: false)
+        expectedTravelTimeLabel.center(in: mapView, xAnchor: true, yAnchor: false)
         segmentedControl.anchor(top: mapView.topAnchor, leading: nil, bottom: nil, trailing: nil, padding: .init(top: 16, left: 32, bottom: 0, right: 32), size: .init(width: 250, height: 0))
-        segmentedControl.center(to: mapView, xAnchor: true, yAnchor: false)
+        segmentedControl.center(in: mapView, xAnchor: true, yAnchor: false)
     }
     
     fileprivate func setupNavigationBarButtons() {
@@ -231,6 +233,10 @@ class DetailsController: UIViewController {
             self.expectedTravelTime = route.expectedTravelTime
             self.mapView.addOverlay(route.polyline, level: .aboveRoads)
             self.mapView.setVisibleMapRect(route.polyline.boundingMapRect, edgePadding: .init(top: 32, left: 32, bottom: 32, right: 32), animated: true)
+            
+            DispatchQueue.main.async {
+                self.mapViewModel.createAnnotation(on: self.mapView, business: self.business)
+            }
         }
     }
     
