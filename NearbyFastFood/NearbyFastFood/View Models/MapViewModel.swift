@@ -10,10 +10,9 @@ import MapKit
 
 class MapViewModel: NSObject {
     
-    func createAnnotation(on mapView: MKMapView, business: Business, subtitle: String?) {
+    func createAnnotation(on mapView: MKMapView, business: Business) {
         let annotation = MKPointAnnotation()
         annotation.title = business.name
-        annotation.subtitle = subtitle
         if let lat = business.coordinates?.latitude, let lon = business.coordinates?.longitude {
             annotation.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
         }

@@ -13,22 +13,16 @@ enum TransportType: Int, CaseIterable {
     case automobile, transit, walking
     var image: UIImage {
         switch self {
-        case .automobile:
-            return UIImage(systemName: "car.fill") ?? UIImage()
-        case .transit:
-            return UIImage(systemName: "tram.fill") ?? UIImage()
-        case .walking:
-            return UIImage(systemName: "tortoise.fill") ?? UIImage()
+        case .automobile: return UIImage(systemName: "car.fill") ?? UIImage()
+        case .transit: return UIImage(systemName: "tram.fill") ?? UIImage()
+        case .walking: return UIImage(systemName: "tortoise.fill") ?? UIImage()
         }
     }
     var directions: MKDirectionsTransportType {
         switch self {
-        case .automobile:
-            return .automobile
-        case .transit:
-            return .transit
-        case .walking:
-            return .walking
+        case .automobile: return .automobile
+        case .transit: return .transit
+        case .walking: return .walking
         }
     }
 }
@@ -45,7 +39,7 @@ class DetailsController: UIViewController {
             guard let url = URL(string: business.imageUrl ?? "") else { return }
             restaurantImageView.load(url: url)
             nameLabel.text = business?.name
-            //mapViewModel.createAnnotation(on: self.mapView, business: self.business)
+            mapViewModel.createAnnotation(on: self.mapView, business: self.business)
         }
     }
     var businessLocation: CLLocationCoordinate2D! {
@@ -53,10 +47,8 @@ class DetailsController: UIViewController {
     }
     var expectedTravelTime: TimeInterval? {
         didSet {
-            let subtitle = expectedTravelTime?.toDisplayString()
-            mapViewModel.createAnnotation(on: self.mapView, business: self.business, subtitle: subtitle)
-            
-//            expectedTravelTimeLabel.text = expectedTravelTime?.toDisplayString()
+            guard let time = expectedTravelTime?.toDisplayString() else { return }
+            expectedTravelTimeLabel.text = "Est Travel Time: " + time
         }
     }
     
@@ -238,7 +230,7 @@ class DetailsController: UIViewController {
             let route = response.routes[0]
             self.expectedTravelTime = route.expectedTravelTime
             self.mapView.addOverlay(route.polyline, level: .aboveRoads)
-            self.mapView.setVisibleMapRect(route.polyline.boundingMapRect, animated: true)
+            self.mapView.setVisibleMapRect(route.polyline.boundingMapRect, edgePadding: .init(top: 32, left: 32, bottom: 32, right: 32), animated: true)
         }
     }
     
