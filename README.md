@@ -4,7 +4,7 @@ A restaurant app that finds fast food places nearby using the user's location. B
 
 # Project Status
 
-The app finds fast food places in 4 categories: Burgers, Pizza, Mexican and Chinese. Results are displayed on the map and in the list view. When the user selects a place, driving directions will be displayed in another screen. Users can select the transport type to see directions via driving or walking. Transit directions are currently disabled, but will be implemented in the next iteration. On the details page, users have the option to share the restaurant's Yelp page or call the business.
+The app finds fast food places in 4 categories: Burgers, Pizza, Mexican and Chinese. Results are displayed on the map and in the list view. When users select a place, driving directions will be displayed in another screen. Users can select the transport type to see directions via driving or walking. Transit directions are currently disabled, but will be implemented in the next iteration. On the details page, users have the option to share the restaurant's Yelp page or call the business.
 
 # Screenshots
 
