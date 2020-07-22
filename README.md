@@ -22,7 +22,7 @@ Learning how to use Yelp Fusion with Apple's MapKit API was a great experience. 
 Things to do:
 
 * when user selects a cluster pin, the map should zoom in
-* fix the annotation flicker when user moves map
+* fix the annotation flicker when user moves the map
 * fix the iOS share sheet delay
 * show multiple routes with the option to select
 * add driving and walking instructions
