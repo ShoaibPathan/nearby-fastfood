@@ -46,7 +46,7 @@ public class APIService {
                     let searchResults = try decoder.decode(SearchResults.self, from: data)
                     completion(searchResults.businesses)
                 } catch let jsonErr {
-                    print("Failed to decode:", jsonErr)
+                    print("Failed to decode businesses:", jsonErr)
                 }
             case .failure(let error):
                 print("Failed to fetch businesses:", error)

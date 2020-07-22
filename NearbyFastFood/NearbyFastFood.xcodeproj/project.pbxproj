@@ -10,7 +10,7 @@
 		5535BEBF424955B3DC465A17 /* Pods_NearbyFastFood.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B4D80C0F040CA0AF9BD3618 /* Pods_NearbyFastFood.framework */; };
 		9E24286424C1E24500E663FC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E24286324C1E24500E663FC /* AppDelegate.swift */; };
 		9E24286624C1E24500E663FC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E24286524C1E24500E663FC /* SceneDelegate.swift */; };
-		9E24286824C1E24500E663FC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E24286724C1E24500E663FC /* ViewController.swift */; };
+		9E24286824C1E24500E663FC /* FastFoodPlacesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E24286724C1E24500E663FC /* FastFoodPlacesController.swift */; };
 		9E24286B24C1E24500E663FC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E24286924C1E24500E663FC /* Main.storyboard */; };
 		9E24286D24C1E24900E663FC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E24286C24C1E24900E663FC /* Assets.xcassets */; };
 		9E24287024C1E24900E663FC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E24286E24C1E24900E663FC /* LaunchScreen.storyboard */; };
@@ -28,7 +28,6 @@
 		9E80024824C268FF001A46E3 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E80024724C268FF001A46E3 /* APIService.swift */; };
 		9E80024B24C28DD6001A46E3 /* Business.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E80024A24C28DD6001A46E3 /* Business.swift */; };
 		9E91D2BE24C67DBF0082644E /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E91D2BD24C67DBF0082644E /* LocationService.swift */; };
-		9E91D2C024C71FB60082644E /* old.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E91D2BF24C71FB60082644E /* old.swift */; };
 		9EDBDA4B24C75E5300C803A6 /* MapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EDBDA4A24C75E5300C803A6 /* MapViewModel.swift */; };
 		9EDBDA4E24C76BAC00C803A6 /* Time + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EDBDA4D24C76BAC00C803A6 /* Time + Extensions.swift */; };
 /* End PBXBuildFile section */
@@ -40,7 +39,7 @@
 		9E24286024C1E24500E663FC /* NearbyFastFood.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NearbyFastFood.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E24286324C1E24500E663FC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9E24286524C1E24500E663FC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		9E24286724C1E24500E663FC /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		9E24286724C1E24500E663FC /* FastFoodPlacesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastFoodPlacesController.swift; sourceTree = "<group>"; };
 		9E24286A24C1E24500E663FC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		9E24286C24C1E24900E663FC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9E24286F24C1E24900E663FC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -59,7 +58,6 @@
 		9E80024724C268FF001A46E3 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		9E80024A24C28DD6001A46E3 /* Business.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Business.swift; sourceTree = "<group>"; };
 		9E91D2BD24C67DBF0082644E /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
-		9E91D2BF24C71FB60082644E /* old.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = old.swift; sourceTree = "<group>"; };
 		9EDBDA4A24C75E5300C803A6 /* MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModel.swift; sourceTree = "<group>"; };
 		9EDBDA4D24C76BAC00C803A6 /* Time + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Time + Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -135,8 +133,7 @@
 		9E2C175B24C3B9CC00ED4ACC /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				9E91D2BF24C71FB60082644E /* old.swift */,
-				9E24286724C1E24500E663FC /* ViewController.swift */,
+				9E24286724C1E24500E663FC /* FastFoodPlacesController.swift */,
 				9E2C176524C530F900ED4ACC /* DetailsController.swift */,
 			);
 			path = Controllers;
@@ -316,7 +313,7 @@
 			files = (
 				9E2C176124C3BAA400ED4ACC /* RestaurantCell.swift in Sources */,
 				9E24287A24C1FB1E00E663FC /* Constants.swift in Sources */,
-				9E24286824C1E24500E663FC /* ViewController.swift in Sources */,
+				9E24286824C1E24500E663FC /* FastFoodPlacesController.swift in Sources */,
 				9E2C176D24C54F7E00ED4ACC /* UIImageView + Extensions.swift in Sources */,
 				9E2C176624C530F900ED4ACC /* DetailsController.swift in Sources */,
 				9E24286424C1E24500E663FC /* AppDelegate.swift in Sources */,
@@ -324,7 +321,6 @@
 				9E2C176424C4ABC400ED4ACC /* RestaurantAnnotationView.swift in Sources */,
 				9E91D2BE24C67DBF0082644E /* LocationService.swift in Sources */,
 				9E24287C24C201FD00E663FC /* AlertService.swift in Sources */,
-				9E91D2C024C71FB60082644E /* old.swift in Sources */,
 				9E6A2CA824C8A6E9007DD993 /* UIViewController + Extensions.swift in Sources */,
 				9E80024B24C28DD6001A46E3 /* Business.swift in Sources */,
 				9E6A2CAA24C8C03D007DD993 /* LoadingView.swift in Sources */,

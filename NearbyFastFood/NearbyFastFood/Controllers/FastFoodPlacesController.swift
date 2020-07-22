@@ -11,9 +11,9 @@ import MapKit
 import CoreLocation
 import Alamofire
 
-class ViewController: UIViewController {
+class FastFoodPlacesController: UIViewController {
     
-    deinit { print("ViewController memory being reclaimed...") }
+    deinit { print("FastFoodPlacesController memory being reclaimed...") }
     
     var previousBusinesses = [Business]()
     var businesses = [Business]() {
@@ -145,7 +145,7 @@ class ViewController: UIViewController {
         view.insertSubview(trackUserButton, aboveSubview: mapView)
         
         // Loading View
-        view.insertSubview(loadingView, at: view.subviews.count)
+        view.addSubview(loadingView)
         setupLayouts()
     }
     
@@ -154,7 +154,7 @@ class ViewController: UIViewController {
         segmentedControl.anchor(top: view.safeAreaLayoutGuide.topAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor, padding: .init(top: 24, left: 72, bottom: 0, right: 72))
         mapView.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor)
         tableView.anchor(top: segmentedControl.bottomAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor, padding: .init(top: 24, left: 0, bottom: 0, right: 0))
-        trackUserButton.anchor(top: nil, leading: nil, bottom: mapView.bottomAnchor, trailing: mapView.trailingAnchor, padding: .init(top: 0, left: 0, bottom: 32, right: 32), size: .init(width: 35, height: 35))
+        trackUserButton.anchor(top: nil, leading: nil, bottom: mapView.bottomAnchor, trailing: mapView.trailingAnchor, padding: .init(top: 0, left: 0, bottom: 48, right: 48), size: .init(width: 35, height: 35))
         loadingView.fillSuperview()
     }
     
@@ -178,7 +178,7 @@ class ViewController: UIViewController {
 
 // MARK: - Fetch Businesses and Annotations
 
-extension ViewController {
+extension FastFoodPlacesController {
     private func fetchBusinesses(latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
         APIService.shared.fetchBusinesses(latitude: latitude, longitude: longitude, radius: LocationService.shared.regionInMeters, sortBy: sortByCriteria, categories: searchCategories) { [weak self] (businesses) in
             self?.loadingView.removeFromSuperview()
@@ -199,7 +199,7 @@ extension ViewController {
 
 // MARK: - TableView Delegate and Datasource
 
-extension ViewController: UITableViewDelegate, UITableViewDataSource {
+extension FastFoodPlacesController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let business = self.businesses[indexPath.row]
@@ -221,7 +221,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
 
 // MARK: - LocationServiceDelegate
 
-extension ViewController: LocationServiceDelegate {
+extension FastFoodPlacesController: LocationServiceDelegate {
     
     func didCheckAuthorizationStatus(status: CLAuthorizationStatus) {
         switch status {
@@ -257,7 +257,7 @@ extension ViewController: LocationServiceDelegate {
 
 //MARK: - MKMapViewDelegate
 
-extension ViewController: MKMapViewDelegate {
+extension FastFoodPlacesController: MKMapViewDelegate {
     
     private func createRegion(center: CLLocationCoordinate2D) -> MKCoordinateRegion {
         return MKCoordinateRegion(center: center, latitudinalMeters: LocationService.shared.regionInMeters, longitudinalMeters: LocationService.shared.regionInMeters)
