@@ -11,10 +11,6 @@ import MapKit
 import CoreLocation
 import Alamofire
 
-// TODO:
-// - zoom into cluster
-// - fix annotation flicker
-
 class ViewController: UIViewController {
     
     deinit { print("ViewController memory being reclaimed...") }
@@ -155,6 +151,26 @@ class ViewController: UIViewController {
     }
 }
 
+// MARK: - Fetch Businesses and Annotations
+
+extension ViewController {
+    private func fetchBusinesses(latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
+        APIService.shared.fetchBusinesses(latitude: latitude, longitude: longitude, radius: LocationService.shared.regionInMeters, sortBy: sortByCriteria, categories: searchCategories) { [weak self] (businesses) in
+            self?.businesses = businesses
+            self?.addAnnotations()
+            self?.tableView.reloadData()
+        }
+    }
+    
+    private func addAnnotations() {
+        let previousAnnotations = mapView.annotations
+        businesses.forEach { (business) in
+            mapViewModel.createAnnotation(on: self.mapView, business: business)
+        }
+        self.mapView.removeAnnotations(previousAnnotations)
+    }
+}
+
 // MARK: - TableView Delegate and Datasource
 
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
@@ -213,66 +229,6 @@ extension ViewController: LocationServiceDelegate {
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// MARK: - Fetch Businesses and Annotations
-
-extension ViewController {
-
-    private func fetchBusinesses(latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
-        APIService.shared.fetchBusinesses(latitude: latitude, longitude: longitude, radius: LocationService.shared.regionInMeters, sortBy: sortByCriteria, categories: searchCategories) { [weak self] (businesses) in
-            self?.businesses = businesses
-            self?.addAnnotations()
-            self?.tableView.reloadData()
-        }
-    }
-    
-    private func addAnnotations() {
-        let previousAnnotations = mapView.annotations
-        businesses.forEach { (business) in
-            mapViewModel.createAnnotation(on: self.mapView, business: business)
-        }
-        self.mapView.removeAnnotations(previousAnnotations)
-    }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //MARK: - MKMapViewDelegate
 
 extension ViewController: MKMapViewDelegate {
@@ -292,10 +248,6 @@ extension ViewController: MKMapViewDelegate {
         let longitude = mapView.centerCoordinate.longitude
         return CLLocation(latitude: latitude, longitude: longitude)
     }
-    
-    
-    
-    
     
     //MARK: - Delegate Methods
     
@@ -338,5 +290,4 @@ extension ViewController: MKMapViewDelegate {
             return annotationView
         }
     }
-    
 }

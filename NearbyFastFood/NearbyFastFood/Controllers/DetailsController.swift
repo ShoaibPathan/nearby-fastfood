@@ -154,15 +154,27 @@ class DetailsController: UIViewController {
         mapView.register(RestaurantAnnotationView.self, forAnnotationViewWithReuseIdentifier: RestaurantAnnotationView.reuseIdentifier)
     }
     
+    //class BusinessUrl: UIActivityItemProvider {
+    //    let sharingURL: URL
+    //    private var semaphore: DispatchSemaphore
+    //    init(url: URL) {
+    //        self.sharingURL = url
+    //        super.init(placeholderItem: url)
+    //    }
+    //
+    //    override var item: Any {
+    //    }
+    //}
+    
     // MARK: - Directions
     
     func getDirections() {
-        guard let userLocation = LocationService.shared.userLocation else {
-            AlertService.showLocationServicesAlert(on: self)
-            return
-        }
+        let location: CLLocationCoordinate2D
+        if let userLocation = LocationService.shared.userLocation {
+            location = userLocation
+        } else { location = LocationService.shared.defaultLocation }
         
-        let request = createDirectionsRequest(from: userLocation)
+        let request = createDirectionsRequest(from: location)
         let directions = MKDirections(request: request)
         resetMapView(withNew: directions)
         
@@ -177,7 +189,6 @@ class DetailsController: UIViewController {
                 for route in response.routes {
                     //let steps = route.steps
                     self.expectedTravelTime = route.expectedTravelTime
-                    
                     self.mapView.addOverlay(route.polyline)
                     self.mapView.setVisibleMapRect(route.polyline.boundingMapRect, animated: true)
                 }
@@ -205,43 +216,21 @@ class DetailsController: UIViewController {
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//class BusinessUrl: UIActivityItemProvider {
-//    let sharingURL: URL
-//    private var semaphore: DispatchSemaphore
-//    init(url: URL) {
-//        self.sharingURL = url
-//        super.init(placeholderItem: url)
-//    }
-//
-//    override var item: Any {
-//    }
-//}
+// MARK: - LocationServiceDelegate
 
 extension DetailsController: LocationServiceDelegate {
     func didCheckAuthorizationStatus(status: CLAuthorizationStatus) {
+        switch status {
+        case .authorizedWhenInUse, .authorizedAlways:
+            mapView.showsUserLocation = true
+            getDirections()
+        case .denied, .restricted:
+            getDirections()
+        default: break
+        }
     }
     
-    func didUpdateLocation(location: CLLocation) {
-    }
-    
+    func didUpdateLocation(location: CLLocation) { }
     func turnOnLocationServices() {
         AlertService.showLocationServicesAlert(on: self)
     }
