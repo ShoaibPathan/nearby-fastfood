@@ -9,7 +9,7 @@
 import UIKit
 
 class LoadingView: UIView {
-    
+
     let activityIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .medium)
         indicator.hidesWhenStopped = true
@@ -20,16 +20,15 @@ class LoadingView: UIView {
         super.init(frame: frame)
         setupView()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     private func setupView() {
         backgroundColor = .white
         addSubview(activityIndicator)
         activityIndicator.fillSuperview()
         activityIndicator.startAnimating()
     }
-
 }

@@ -40,6 +40,12 @@ class ViewController: UIViewController {
     
     var mapViewModel = MapViewModel()
     
+    let loadingView: LoadingView = {
+        let view = LoadingView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     let feedbackGenerator: UIImpactFeedbackGenerator = {
         let generator = UIImpactFeedbackGenerator(style: .medium)
         generator.prepare()
@@ -116,9 +122,6 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        showLoadingIndicator(on: view)
-        
         setupMapView()
         setupViews()
         setupTableView()
@@ -140,6 +143,9 @@ class ViewController: UIViewController {
         view.addSubview(segmentedControl)
         [mapView, tableView].forEach { view.insertSubview($0, belowSubview: segmentedControl)}
         view.insertSubview(trackUserButton, aboveSubview: mapView)
+        
+        // Loading View
+        view.insertSubview(loadingView, at: view.subviews.count)
         setupLayouts()
     }
     
@@ -149,6 +155,7 @@ class ViewController: UIViewController {
         mapView.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor)
         tableView.anchor(top: segmentedControl.bottomAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor, padding: .init(top: 24, left: 0, bottom: 0, right: 0))
         trackUserButton.anchor(top: nil, leading: nil, bottom: mapView.bottomAnchor, trailing: mapView.trailingAnchor, padding: .init(top: 0, left: 0, bottom: 32, right: 32), size: .init(width: 35, height: 35))
+        loadingView.fillSuperview()
     }
     
     private func setupMapView() {
@@ -174,9 +181,7 @@ class ViewController: UIViewController {
 extension ViewController {
     private func fetchBusinesses(latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
         APIService.shared.fetchBusinesses(latitude: latitude, longitude: longitude, radius: LocationService.shared.regionInMeters, sortBy: sortByCriteria, categories: searchCategories) { [weak self] (businesses) in
-            
-            self?.removeLoadingIndicator()
-            
+            self?.loadingView.removeFromSuperview()
             self?.businesses = businesses
             self?.addAnnotations()
             self?.tableView.reloadData()

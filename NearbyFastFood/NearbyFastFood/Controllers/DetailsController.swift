@@ -36,11 +36,11 @@ class DetailsController: UIViewController {
     
     var business: Business! {
         didSet {
-            centreMap(on: businessLocation)
             nameLabel.text = business?.name
             if let url = URL(string: business.imageUrl ?? "") {
                 restaurantImageView.load(url: url)
             }
+            centreMap(on: businessLocation)
             DispatchQueue.main.async {
                 self.mapViewModel.createAnnotation(on: self.mapView, business: self.business)
             }
