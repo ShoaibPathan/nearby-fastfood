@@ -73,8 +73,19 @@ class DetailsController: UIViewController {
         button.setTitleColor(.white, for: .normal)
         button.setTitle("Call Business", for: .normal)
         button.backgroundColor = #colorLiteral(red: 0.2509803922, green: 0, blue: 0.5098039216, alpha: 1)
+        button.addTarget(self, action: #selector(handleCall), for: .touchUpInside)
         return button
     }()
+    
+    @objc func handleCall() {
+        guard let number = business.phone else { return }
+        guard let url = URL(string: "tel://\(number)"), UIApplication.shared.canOpenURL(url) else { return }
+        if #available(iOS 10, *) {
+            UIApplication.shared.open(url)
+        } else {
+            UIApplication.shared.openURL(url)
+        }
+    }
     
     let stackView: UIStackView = {
         let stackView = UIStackView()
@@ -106,9 +117,7 @@ class DetailsController: UIViewController {
         navigationItem.title = "Details"
         [restaurantImageView, nameLabel, stackView].forEach { view.addSubview($0) }
         [mapView, callButton].forEach { stackView.addArrangedSubview($0) }
-        
         view.insertSubview(expectedTravelTimeLabel, aboveSubview: mapView)
-        
         setupLayouts()
     }
     
@@ -194,7 +203,6 @@ class DetailsController: UIViewController {
         let _ = directionsArray.map{ $0.cancel() }
         self.directionsArray = []
     }
-    
 }
 
 
