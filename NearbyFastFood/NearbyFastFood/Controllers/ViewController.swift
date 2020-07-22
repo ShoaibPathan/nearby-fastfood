@@ -29,7 +29,7 @@ class ViewController: UIViewController {
     private var regionIsCenteredOnUserLocation = false
     private var regionChangedBeyondThreshold: Bool {
         get {
-            let center = getCenterLocation(for: mapView)
+            let center = getCentreLocation(for: mapView)
             guard let previousLocation = previousLocation else { return false }
             if center.distance(from: previousLocation) > regionChangeThreshold {
                 self.previousLocation = center
@@ -62,10 +62,26 @@ class ViewController: UIViewController {
         return map
     }()
     
+    let trackUserButton: UIButton = {
+        let button = UIButton(type: .system)
+        let image = UIImage(systemName: "location.fill")
+        button.setImage(image, for: .normal)
+        button.contentVerticalAlignment = .fill
+        button.contentHorizontalAlignment = .fill
+        button.backgroundColor = .clear
+        button.addTarget(self, action: #selector(handleTrackUser), for: .touchUpInside)
+        return button
+    }()
+    
     let tableView: UITableView = {
         let table = UITableView()
         return table
     }()
+    
+    @objc func handleTrackUser() {
+        guard let userLocation = LocationService.shared.userLocation else { return }
+        centreMap(on: userLocation)
+    }
     
     @objc func handleSegmentChange() {
         if segmentedControl.selectedSegmentIndex == 0 {
@@ -120,6 +136,7 @@ class ViewController: UIViewController {
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
         view.addSubview(segmentedControl)
         [mapView, tableView].forEach { view.insertSubview($0, belowSubview: segmentedControl)}
+        view.insertSubview(trackUserButton, aboveSubview: mapView)
         setupLayouts()
     }
     
@@ -128,6 +145,7 @@ class ViewController: UIViewController {
         segmentedControl.anchor(top: view.safeAreaLayoutGuide.topAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor, padding: .init(top: 24, left: 72, bottom: 0, right: 72))
         mapView.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor)
         tableView.anchor(top: segmentedControl.bottomAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor, padding: .init(top: 24, left: 0, bottom: 0, right: 0))
+        trackUserButton.anchor(top: nil, leading: nil, bottom: mapView.bottomAnchor, trailing: mapView.trailingAnchor, padding: .init(top: 0, left: 0, bottom: 32, right: 32), size: .init(width: 35, height: 35))
     }
     
     private func setupMapView() {
@@ -240,10 +258,10 @@ extension ViewController: MKMapViewDelegate {
     private func centreMap(on location: CLLocationCoordinate2D) {
         let region = createRegion(center: location)
         mapView.setRegion(region, animated: true)
-        previousLocation = getCenterLocation(for: mapView)
+        previousLocation = getCentreLocation(for: mapView)
     }
     
-    private func getCenterLocation(for mapView: MKMapView) -> CLLocation {
+    private func getCentreLocation(for mapView: MKMapView) -> CLLocation {
         let latitude = mapView.centerCoordinate.latitude
         let longitude = mapView.centerCoordinate.longitude
         return CLLocation(latitude: latitude, longitude: longitude)
