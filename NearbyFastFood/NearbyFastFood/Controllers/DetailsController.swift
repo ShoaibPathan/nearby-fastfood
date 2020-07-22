@@ -90,6 +90,7 @@ class DetailsController: UIViewController {
         label.textColor = .white
         label.textAlignment = .center
         label.font = UIFont.boldSystemFont(ofSize: 12.0)
+        label.layer.cornerRadius = label.intrinsicContentSize.height / 2
         return label
     }()
     

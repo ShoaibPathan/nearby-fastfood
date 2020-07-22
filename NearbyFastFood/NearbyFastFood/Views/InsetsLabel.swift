@@ -36,7 +36,7 @@ class InsetsLabel: UILabel {
         var originalContentSize = super.intrinsicContentSize
         originalContentSize.height += topInset + bottomInset
         originalContentSize.width += leftInset + rightInset
-        //layer.masksToBounds = true
+        layer.masksToBounds = true
         return originalContentSize
     }
 }

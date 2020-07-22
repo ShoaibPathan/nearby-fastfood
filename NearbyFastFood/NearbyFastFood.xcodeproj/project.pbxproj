@@ -23,8 +23,6 @@
 		9E2C176624C530F900ED4ACC /* DetailsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2C176524C530F900ED4ACC /* DetailsController.swift */; };
 		9E2C176B24C546CE00ED4ACC /* InsetsLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2C176A24C546CE00ED4ACC /* InsetsLabel.swift */; };
 		9E2C176D24C54F7E00ED4ACC /* UIImageView + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2C176C24C54F7E00ED4ACC /* UIImageView + Extensions.swift */; };
-		9E2C177124C5562100ED4ACC /* ScaleAspectFitImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2C177024C5562000ED4ACC /* ScaleAspectFitImageView.swift */; };
-		9E80024524C24AFC001A46E3 /* RequestInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E80024424C24AFC001A46E3 /* RequestInterceptor.swift */; };
 		9E80024824C268FF001A46E3 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E80024724C268FF001A46E3 /* APIService.swift */; };
 		9E80024B24C28DD6001A46E3 /* Business.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E80024A24C28DD6001A46E3 /* Business.swift */; };
 		9E91D2BE24C67DBF0082644E /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E91D2BD24C67DBF0082644E /* LocationService.swift */; };
@@ -54,8 +52,6 @@
 		9E2C176524C530F900ED4ACC /* DetailsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsController.swift; sourceTree = "<group>"; };
 		9E2C176A24C546CE00ED4ACC /* InsetsLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsetsLabel.swift; sourceTree = "<group>"; };
 		9E2C176C24C54F7E00ED4ACC /* UIImageView + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView + Extensions.swift"; sourceTree = "<group>"; };
-		9E2C177024C5562000ED4ACC /* ScaleAspectFitImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScaleAspectFitImageView.swift; sourceTree = "<group>"; };
-		9E80024424C24AFC001A46E3 /* RequestInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestInterceptor.swift; sourceTree = "<group>"; };
 		9E80024724C268FF001A46E3 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		9E80024A24C28DD6001A46E3 /* Business.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Business.swift; sourceTree = "<group>"; };
 		9E91D2BD24C67DBF0082644E /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
@@ -107,6 +103,9 @@
 			children = (
 				9E24286324C1E24500E663FC /* AppDelegate.swift */,
 				9E24286524C1E24500E663FC /* SceneDelegate.swift */,
+				9E2C176924C53E1200ED4ACC /* Extensions */,
+				9E80024924C289A8001A46E3 /* Constants */,
+				9E24287D24C202EF00E663FC /* Services */,
 				9E80024C24C28DDB001A46E3 /* Model */,
 				9E2C175E24C3BA4D00ED4ACC /* Views */,
 				9EDBDA4C24C761DC00C803A6 /* View Models */,
@@ -115,10 +114,6 @@
 				9E24286C24C1E24900E663FC /* Assets.xcassets */,
 				9E24286E24C1E24900E663FC /* LaunchScreen.storyboard */,
 				9E24287124C1E24900E663FC /* Info.plist */,
-				9E2C176924C53E1200ED4ACC /* Extensions */,
-				9E80024924C289A8001A46E3 /* Constants */,
-				9E24287D24C202EF00E663FC /* Services */,
-				9E80024624C24C93001A46E3 /* Alamofire */,
 			);
 			path = NearbyFastFood;
 			sourceTree = "<group>";
@@ -127,6 +122,8 @@
 			isa = PBXGroup;
 			children = (
 				9E24287B24C201FD00E663FC /* AlertService.swift */,
+				9E80024724C268FF001A46E3 /* APIService.swift */,
+				9E91D2BD24C67DBF0082644E /* LocationService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -148,7 +145,6 @@
 				9E2C176024C3BAA400ED4ACC /* RestaurantCell.xib */,
 				9E2C176324C4ABC400ED4ACC /* RestaurantAnnotationView.swift */,
 				9E2C176A24C546CE00ED4ACC /* InsetsLabel.swift */,
-				9E2C177024C5562000ED4ACC /* ScaleAspectFitImageView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -161,16 +157,6 @@
 				9EDBDA4D24C76BAC00C803A6 /* Time + Extensions.swift */,
 			);
 			path = Extensions;
-			sourceTree = "<group>";
-		};
-		9E80024624C24C93001A46E3 /* Alamofire */ = {
-			isa = PBXGroup;
-			children = (
-				9E80024724C268FF001A46E3 /* APIService.swift */,
-				9E80024424C24AFC001A46E3 /* RequestInterceptor.swift */,
-				9E91D2BD24C67DBF0082644E /* LocationService.swift */,
-			);
-			path = Alamofire;
 			sourceTree = "<group>";
 		};
 		9E80024924C289A8001A46E3 /* Constants */ = {
@@ -323,9 +309,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9E2C176124C3BAA400ED4ACC /* RestaurantCell.swift in Sources */,
-				9E2C177124C5562100ED4ACC /* ScaleAspectFitImageView.swift in Sources */,
 				9E24287A24C1FB1E00E663FC /* Constants.swift in Sources */,
-				9E80024524C24AFC001A46E3 /* RequestInterceptor.swift in Sources */,
 				9E24286824C1E24500E663FC /* ViewController.swift in Sources */,
 				9E2C176D24C54F7E00ED4ACC /* UIImageView + Extensions.swift in Sources */,
 				9E2C176624C530F900ED4ACC /* DetailsController.swift in Sources */,

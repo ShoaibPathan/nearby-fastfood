@@ -17,6 +17,7 @@ struct Business: Codable, Identifiable {
     let categories: [Categories]?
     let coordinates: Coordinates?
     let url: String?
+    let phone: String?
 }
 
 struct Categories: Codable {
@@ -28,5 +29,3 @@ struct Coordinates: Codable {
     let latitude: Double
     let longitude: Double
 }
-
-
