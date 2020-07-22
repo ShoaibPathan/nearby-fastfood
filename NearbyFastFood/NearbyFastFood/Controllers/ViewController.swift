@@ -22,7 +22,6 @@ class ViewController: UIViewController {
         }
     }
     private let defaults = UserDefaults.standard
-//    private let regionInMeters: Double = 1000
     private let regionChangeThreshold: Double = 200
     private let searchCategories = "burgers,pizza,mexican,chinese"
     private let sortByCriteria = "distance"
@@ -56,6 +55,11 @@ class ViewController: UIViewController {
         sc.selectedSegmentIndex = 0 // UserDefaults Preference
         sc.addTarget(self, action: #selector(handleSegmentChange), for: .valueChanged)
         return sc
+    }()
+    
+    let loadingView: LoadingView = {
+        let view = LoadingView()
+        return view
     }()
     
     let mapView: MKMapView = {
@@ -119,10 +123,18 @@ class ViewController: UIViewController {
         view.addSubview(segmentedControl)
         view.insertSubview(mapView, belowSubview: segmentedControl)
         view.insertSubview(tableView, belowSubview: mapView)
+
+        
+        
+        
+        view.addSubview(loadingView)
         setupLayouts()
     }
     
     private func setupLayouts() {
+        
+        loadingView.fillSuperview()
+        
         segmentedControl.translatesAutoresizingMaskIntoConstraints = false
         segmentedControl.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         segmentedControl.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24).isActive = true        

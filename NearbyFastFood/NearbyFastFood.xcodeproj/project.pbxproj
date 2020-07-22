@@ -23,6 +23,7 @@
 		9E2C176624C530F900ED4ACC /* DetailsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2C176524C530F900ED4ACC /* DetailsController.swift */; };
 		9E2C176B24C546CE00ED4ACC /* InsetsLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2C176A24C546CE00ED4ACC /* InsetsLabel.swift */; };
 		9E2C176D24C54F7E00ED4ACC /* UIImageView + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2C176C24C54F7E00ED4ACC /* UIImageView + Extensions.swift */; };
+		9E6A2CA624C89D07007DD993 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E6A2CA524C89D07007DD993 /* LoadingView.swift */; };
 		9E80024824C268FF001A46E3 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E80024724C268FF001A46E3 /* APIService.swift */; };
 		9E80024B24C28DD6001A46E3 /* Business.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E80024A24C28DD6001A46E3 /* Business.swift */; };
 		9E91D2BE24C67DBF0082644E /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E91D2BD24C67DBF0082644E /* LocationService.swift */; };
@@ -52,6 +53,7 @@
 		9E2C176524C530F900ED4ACC /* DetailsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsController.swift; sourceTree = "<group>"; };
 		9E2C176A24C546CE00ED4ACC /* InsetsLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsetsLabel.swift; sourceTree = "<group>"; };
 		9E2C176C24C54F7E00ED4ACC /* UIImageView + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView + Extensions.swift"; sourceTree = "<group>"; };
+		9E6A2CA524C89D07007DD993 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		9E80024724C268FF001A46E3 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		9E80024A24C28DD6001A46E3 /* Business.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Business.swift; sourceTree = "<group>"; };
 		9E91D2BD24C67DBF0082644E /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
@@ -145,6 +147,7 @@
 				9E2C176024C3BAA400ED4ACC /* RestaurantCell.xib */,
 				9E2C176324C4ABC400ED4ACC /* RestaurantAnnotationView.swift */,
 				9E2C176A24C546CE00ED4ACC /* InsetsLabel.swift */,
+				9E6A2CA524C89D07007DD993 /* LoadingView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -325,6 +328,7 @@
 				9E2C176B24C546CE00ED4ACC /* InsetsLabel.swift in Sources */,
 				9EDBDA4E24C76BAC00C803A6 /* Time + Extensions.swift in Sources */,
 				9EDBDA4B24C75E5300C803A6 /* MapViewModel.swift in Sources */,
+				9E6A2CA624C89D07007DD993 /* LoadingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

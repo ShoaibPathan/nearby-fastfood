@@ -11,11 +11,11 @@ import UIKit
 class AlertService {
     private init() {}
     
-//    public static func showActivityIndicator() -> UIActivityIndicatorView {
-//        let activityIndicatorView = UIActivityIndicatorView(style: .medium)
-//        activityIndicatorView.hidesWhenStopped = true
-//        return activityIndicatorView
-//    }
+    public static func showActivityIndicator() -> UIActivityIndicatorView {
+        let activityIndicatorView = UIActivityIndicatorView(style: .medium)
+        activityIndicatorView.hidesWhenStopped = true
+        return activityIndicatorView
+    }
     
     //MARK: - Alert
     
@@ -46,13 +46,4 @@ class AlertService {
         alert.addAction(action)
         DispatchQueue.main.async { vc.present(alert, animated: true, completion: nil) }
     }
-    
-    
-    
-    
-    
-//    static func showFileUrlNotFoundAlert(on vc: UIViewController, actionHandler: ((UIAlertAction) -> Void)?) {
-//        showBasicActionSheetAlert(on: vc, title: "Local file could not be found", message: "Would you like to stream the podcast instead?", actionHandler: actionHandler, cancelHandler: nil)
-//    }
-    
 }

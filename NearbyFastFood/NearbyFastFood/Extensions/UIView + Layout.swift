@@ -50,6 +50,9 @@ extension UIView {
     }
     
     func center(to view: UIView, xAnchor: Bool = true, yAnchor: Bool = true) {
+        
+        translatesAutoresizingMaskIntoConstraints = false
+        
         if xAnchor {
             centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         }
