@@ -46,6 +46,7 @@ extension UIView {
         if size.height != 0 {
             heightAnchor.constraint(equalToConstant: size.height).isActive = true
         }
+        
     }
     
     func center(to view: UIView, xAnchor: Bool = true, yAnchor: Bool = true) {

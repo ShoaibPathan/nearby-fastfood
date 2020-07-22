@@ -105,6 +105,24 @@ class DetailsController: UIViewController {
         return label
     }()
     
+    let segmentedControl: UISegmentedControl = {
+        let automobile = UIImage(systemName: "car.fill")
+        let transit = UIImage(systemName: "tram.fill")
+        let walking = UIImage(systemName: "tortoise.fill")
+        let sc = UISegmentedControl(items: [automobile!, transit!, walking!])
+        sc.backgroundColor = #colorLiteral(red: 0.8784313725, green: 0.8823529412, blue: 0.8862745098, alpha: 0.5)
+        sc.selectedSegmentTintColor = #colorLiteral(red: 0.2509803922, green: 0, blue: 0.5098039216, alpha: 1)
+        sc.setTitleTextAttributes([NSAttributedString.Key.foregroundColor : #colorLiteral(red: 0.1176470588, green: 0.1529411765, blue: 0.1803921569, alpha: 1)], for: UIControl.State.normal)
+        sc.setTitleTextAttributes([NSAttributedString.Key.foregroundColor : #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)], for: UIControl.State.selected)
+        sc.selectedSegmentIndex = 0 // UserDefaults Preference
+        sc.addTarget(self, action: #selector(handleSegmentChange), for: .valueChanged)
+        return sc
+    }()
+    
+    @objc func handleSegmentChange() {
+        
+    }
+    
     // MARK: - Setup
     
     private func setupLocationService() {
@@ -117,7 +135,7 @@ class DetailsController: UIViewController {
         navigationItem.title = "Details"
         [restaurantImageView, nameLabel, stackView].forEach { view.addSubview($0) }
         [mapView, callButton].forEach { stackView.addArrangedSubview($0) }
-        view.insertSubview(expectedTravelTimeLabel, aboveSubview: mapView)
+        [expectedTravelTimeLabel, segmentedControl].forEach { view.insertSubview($0, aboveSubview: mapView)}
         setupLayouts()
     }
     
@@ -129,8 +147,10 @@ class DetailsController: UIViewController {
         mapView.anchor(top: restaurantImageView.bottomAnchor, leading: stackView.leadingAnchor, bottom: nil, trailing: stackView.trailingAnchor, padding: .init(top: 16, left: 16, bottom: 0, right: 16))
         callButton.anchor(top: nil, leading: stackView.leadingAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, trailing: stackView.trailingAnchor, padding: .init(top: 0, left: 16, bottom: 16, right: 16), size: .init(width: 0, height: 48.0))
         
-        expectedTravelTimeLabel.anchor(top: mapView.topAnchor, leading: nil, bottom: nil, trailing: nil, padding: .init(top: 16, left: 0, bottom: 0, right: 0))
-        expectedTravelTimeLabel.center(to: view, xAnchor: true, yAnchor: false)
+        expectedTravelTimeLabel.anchor(top: nil, leading: nil, bottom: mapView.bottomAnchor, trailing: nil, padding: .init(top: 0, left: 0, bottom: 16, right: 0))
+        expectedTravelTimeLabel.center(to: mapView, xAnchor: true, yAnchor: false)
+        segmentedControl.anchor(top: mapView.topAnchor, leading: nil, bottom: nil, trailing: nil, padding: .init(top: 16, left: 32, bottom: 0, right: 32), size: .init(width: 250, height: 0))
+        segmentedControl.center(to: mapView, xAnchor: true, yAnchor: false)
     }
     
     fileprivate func setupNavigationBarButtons() {
@@ -167,7 +187,7 @@ class DetailsController: UIViewController {
     //}
     
     // MARK: - Directions
-    
+
     func getDirections() {
         let location: CLLocationCoordinate2D
         if let userLocation = LocationService.shared.userLocation {
@@ -179,20 +199,20 @@ class DetailsController: UIViewController {
         resetMapView(withNew: directions)
         
         directions.calculate { [unowned self] (response, error) in
-            if error != nil {
-                print("Failed to calculate directions")
-            } else {
-                guard let response = response else {
+            guard let response = response else {
+                if let error = error {
+                    print("Error:", error.localizedDescription)
                     AlertService.showDirectionsNotAavailableAlert(on: self)
-                    return
                 }
-                for route in response.routes {
-                    //let steps = route.steps
-                    self.expectedTravelTime = route.expectedTravelTime
-                    self.mapView.addOverlay(route.polyline)
-                    self.mapView.setVisibleMapRect(route.polyline.boundingMapRect, animated: true)
-                }
+                return
             }
+            for _ in response.routes {
+                //let steps = route.steps
+            }
+            let route = response.routes[0]
+            self.expectedTravelTime = route.expectedTravelTime
+            self.mapView.addOverlay(route.polyline, level: .aboveRoads)
+            self.mapView.setVisibleMapRect(route.polyline.boundingMapRect, animated: true)
         }
     }
     

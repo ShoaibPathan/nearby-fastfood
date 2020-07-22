@@ -255,19 +255,19 @@ extension ViewController: MKMapViewDelegate {
         if #available(iOS 10,*) {
             feedbackGenerator.impactOccurred()
         }
-        
+        if view is RestaurantAnnotationView {
+            let title = view.annotation?.title
+            guard let index = businesses.firstIndex(where: {$0.name == title}) else { return }
+            let business = businesses[index]
+            
+            let detailsController = DetailsController()
+            detailsController.business = business
+            navigationController?.pushViewController(detailsController, animated: true)
+        }
         //        // zoom into cluster
         //        if view is RestaurantClusterView {
         //            guard let annotation = view.annotation else { return }
         //        }
-        
-        let title = view.annotation?.title
-        guard let index = businesses.firstIndex(where: {$0.name == title}) else { return }
-        let business = businesses[index]
-        
-        let detailsController = DetailsController()
-        detailsController.business = business
-        navigationController?.pushViewController(detailsController, animated: true)
     }
 
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
