@@ -167,7 +167,13 @@ class ViewController: UIViewController {
 
 extension ViewController {
     private func fetchBusinesses(latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
+        
         APIService.shared.fetchBusinesses(latitude: latitude, longitude: longitude, radius: LocationService.shared.regionInMeters, sortBy: sortByCriteria, categories: searchCategories) { [weak self] (businesses) in
+                        
+            UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
+                self?.loadingView.alpha = 0
+            }, completion: nil)
+
             self?.businesses = businesses
             self?.addAnnotations()
             self?.tableView.reloadData()
