@@ -8,25 +8,7 @@
 
 import UIKit
 
-var storedLoadingView: UIView?
-
 extension UIViewController {
-    
-    func showLoadingIndicator(on view: UIView) {
-        let loadingView = LoadingView()
-        loadingView.frame = view.bounds
-        DispatchQueue.main.async {
-            view.addSubview(loadingView)
-        }
-        storedLoadingView = loadingView
-    }
-
-    func removeLoadingIndicator() {
-        DispatchQueue.main.async {
-            storedLoadingView?.removeFromSuperview()
-            storedLoadingView = nil
-        }
-    }
 
     //MARK: - Child View Controllers
     
