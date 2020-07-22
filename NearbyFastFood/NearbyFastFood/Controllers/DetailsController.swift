@@ -9,6 +9,30 @@
 import UIKit
 import MapKit
 
+enum TransportType: Int, CaseIterable {
+    case automobile, transit, walking
+    var image: UIImage {
+        switch self {
+        case .automobile:
+            return UIImage(systemName: "car.fill") ?? UIImage()
+        case .transit:
+            return UIImage(systemName: "tram.fill") ?? UIImage()
+        case .walking:
+            return UIImage(systemName: "tortoise.fill") ?? UIImage()
+        }
+    }
+    var directions: MKDirectionsTransportType {
+        switch self {
+        case .automobile:
+            return .automobile
+        case .transit:
+            return .transit
+        case .walking:
+            return .walking
+        }
+    }
+}
+
 class DetailsController: UIViewController {
     
     deinit { print("DetailsController memory being reclaimed...") }
@@ -106,10 +130,7 @@ class DetailsController: UIViewController {
     }()
     
     let segmentedControl: UISegmentedControl = {
-        let automobile = UIImage(systemName: "car.fill")
-        let transit = UIImage(systemName: "tram.fill")
-        let walking = UIImage(systemName: "tortoise.fill")
-        let sc = UISegmentedControl(items: [automobile!, transit!, walking!])
+        let sc = UISegmentedControl(items: TransportType.allCases.map { $0.image })
         sc.backgroundColor = #colorLiteral(red: 0.8784313725, green: 0.8823529412, blue: 0.8862745098, alpha: 0.5)
         sc.selectedSegmentTintColor = #colorLiteral(red: 0.2509803922, green: 0, blue: 0.5098039216, alpha: 1)
         sc.setTitleTextAttributes([NSAttributedString.Key.foregroundColor : #colorLiteral(red: 0.1176470588, green: 0.1529411765, blue: 0.1803921569, alpha: 1)], for: UIControl.State.normal)
@@ -119,8 +140,8 @@ class DetailsController: UIViewController {
         return sc
     }()
     
-    @objc func handleSegmentChange() {
-        
+    @objc func handleSegmentChange(_ sender: UISegmentedControl) {
+        getDirections()
     }
     
     // MARK: - Setup
@@ -219,11 +240,14 @@ class DetailsController: UIViewController {
     func createDirectionsRequest(from coordinate: CLLocationCoordinate2D) -> MKDirections.Request {
         let startingLocation = MKPlacemark(coordinate: coordinate)
         let destination = MKPlacemark(coordinate: businessLocation)
-        
         let request = MKDirections.Request()
         request.source = MKMapItem(placemark: startingLocation)
         request.destination = MKMapItem(placemark: destination)
-        request.transportType = .automobile
+
+        // Use Transport Type enum
+        let transportType = TransportType.allCases[segmentedControl.selectedSegmentIndex]
+        request.transportType = transportType.directions
+        
         request.requestsAlternateRoutes = true
         return request
     }
