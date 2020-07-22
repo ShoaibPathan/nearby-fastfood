@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  FastFoodPlacesController.swift
 //  NearbyFastFood
 //
 //  Created by Priscilla Ip on 2020-07-17.
