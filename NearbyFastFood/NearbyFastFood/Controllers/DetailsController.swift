@@ -118,17 +118,17 @@ class DetailsController: UIViewController {
     
     let expectedTravelTimeLabel: UILabel = {
         let label = InsetsLabel(withInsets: 6, 8, 6, 8)
-        label.backgroundColor = #colorLiteral(red: 0.8431372549, green: 0.2196078431, blue: 0.368627451, alpha: 0.85) // 85%
+        label.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.85) // 85%
         label.textColor = .white
         label.textAlignment = .center
-        label.font = UIFont.boldSystemFont(ofSize: 12.0)
+        label.font = UIFont.boldSystemFont(ofSize: 10.0)
         label.layer.cornerRadius = label.intrinsicContentSize.height / 2
         return label
     }()
     
     let segmentedControl: UISegmentedControl = {
         let sc = UISegmentedControl(items: TransportType.allCases.map { $0.image })
-        sc.backgroundColor = #colorLiteral(red: 0.8784313725, green: 0.8823529412, blue: 0.8862745098, alpha: 0.5)
+        sc.backgroundColor = #colorLiteral(red: 0.8784313725, green: 0.8823529412, blue: 0.8862745098, alpha: 0.85) // 85%
         sc.selectedSegmentTintColor = #colorLiteral(red: 0.2509803922, green: 0, blue: 0.5098039216, alpha: 1)
         sc.setTitleTextAttributes([NSAttributedString.Key.foregroundColor : #colorLiteral(red: 0.1176470588, green: 0.1529411765, blue: 0.1803921569, alpha: 1)], for: UIControl.State.normal)
         sc.setTitleTextAttributes([NSAttributedString.Key.foregroundColor : #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)], for: UIControl.State.selected)
@@ -296,7 +296,8 @@ extension DetailsController: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-        let renderer = MKPolylineRenderer(overlay: overlay as! MKPolyline)
+        guard let polyline = overlay as? MKPolyline else { fatalError("Polyline Renderer could not be initialized") }
+        let renderer = MKPolylineRenderer(overlay: polyline)
         renderer.strokeColor = #colorLiteral(red: 0.05882352941, green: 0.737254902, blue: 0.9764705882, alpha: 1)
         renderer.lineWidth = 4.0
         return renderer
