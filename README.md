@@ -17,7 +17,7 @@ The app finds fast food places in 4 categories: Burgers, Pizza, Mexican and Chin
 
 # Reflection
 
-Learning how to use Yelp Fusion with Apple's MapKit API was a great experience. Networking proved challenging, but the troubleshooting process forced me to research more into Alamofire. In hindsight, I probably could have built this using Apple's URLSession.
+Learning how to use Yelp Fusion with Apple's MapKit API was a great experience. Networking proved challenging, but troubleshooting forced me to research more into Alamofire. In hindsight, I probably could have built this using Apple's URLSession.
 
 Things to do:
 
