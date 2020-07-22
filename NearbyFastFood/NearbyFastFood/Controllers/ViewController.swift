@@ -165,7 +165,7 @@ extension ViewController {
     private func addAnnotations() {
         let previousAnnotations = mapView.annotations
         businesses.forEach { (business) in
-            mapViewModel.createAnnotation(on: self.mapView, business: business)
+            mapViewModel.createAnnotation(on: self.mapView, business: business, subtitle: nil)
         }
         self.mapView.removeAnnotations(previousAnnotations)
     }

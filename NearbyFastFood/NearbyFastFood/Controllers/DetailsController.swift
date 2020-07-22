@@ -45,7 +45,7 @@ class DetailsController: UIViewController {
             guard let url = URL(string: business.imageUrl ?? "") else { return }
             restaurantImageView.load(url: url)
             nameLabel.text = business?.name
-            mapViewModel.createAnnotation(on: self.mapView, business: self.business)
+            //mapViewModel.createAnnotation(on: self.mapView, business: self.business)
         }
     }
     var businessLocation: CLLocationCoordinate2D! {
@@ -53,7 +53,10 @@ class DetailsController: UIViewController {
     }
     var expectedTravelTime: TimeInterval? {
         didSet {
-            expectedTravelTimeLabel.text = expectedTravelTime?.toDisplayString()
+            let subtitle = expectedTravelTime?.toDisplayString()
+            mapViewModel.createAnnotation(on: self.mapView, business: self.business, subtitle: subtitle)
+            
+//            expectedTravelTimeLabel.text = expectedTravelTime?.toDisplayString()
         }
     }
     
@@ -135,7 +138,9 @@ class DetailsController: UIViewController {
         sc.selectedSegmentTintColor = #colorLiteral(red: 0.2509803922, green: 0, blue: 0.5098039216, alpha: 1)
         sc.setTitleTextAttributes([NSAttributedString.Key.foregroundColor : #colorLiteral(red: 0.1176470588, green: 0.1529411765, blue: 0.1803921569, alpha: 1)], for: UIControl.State.normal)
         sc.setTitleTextAttributes([NSAttributedString.Key.foregroundColor : #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)], for: UIControl.State.selected)
+        sc.setTitleTextAttributes([NSAttributedString.Key.foregroundColor : #colorLiteral(red: 0.1176470588, green: 0.1529411765, blue: 0.1803921569, alpha: 0.15)], for: UIControl.State.disabled)
         sc.selectedSegmentIndex = 0 // UserDefaults Preference
+        sc.setEnabled(false, forSegmentAt: TransportType.transit.rawValue)
         sc.addTarget(self, action: #selector(handleSegmentChange), for: .valueChanged)
         return sc
     }()
@@ -247,7 +252,6 @@ class DetailsController: UIViewController {
         // Use Transport Type enum
         let transportType = TransportType.allCases[segmentedControl.selectedSegmentIndex]
         request.transportType = transportType.directions
-        
         request.requestsAlternateRoutes = true
         return request
     }
