@@ -79,7 +79,10 @@ class ViewController: UIViewController {
     }()
     
     @objc func handleTrackUser() {
-        guard let userLocation = LocationService.shared.userLocation else { return }
+        guard let userLocation = LocationService.shared.userLocation else {
+            AlertService.showLocationServicesAlert(on: self)
+            return
+        }
         centreMap(on: userLocation)
     }
     
@@ -275,6 +278,7 @@ extension ViewController: MKMapViewDelegate {
         }
         if view is RestaurantAnnotationView {
             let title = view.annotation?.title
+            // TODO: Use Business ID instead
             guard let index = businesses.firstIndex(where: {$0.name == title}) else { return }
             let business = businesses[index]
             

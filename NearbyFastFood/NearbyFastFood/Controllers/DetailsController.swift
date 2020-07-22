@@ -37,9 +37,13 @@ class DetailsController: UIViewController {
     var business: Business! {
         didSet {
             centreMap(on: businessLocation)
-            guard let url = URL(string: business.imageUrl ?? "") else { return }
-            restaurantImageView.load(url: url)
             nameLabel.text = business?.name
+            if let url = URL(string: business.imageUrl ?? "") {
+                restaurantImageView.load(url: url)
+            }
+            DispatchQueue.main.async {
+                self.mapViewModel.createAnnotation(on: self.mapView, business: self.business)
+            }
             getDirections()
         }
     }
@@ -48,6 +52,7 @@ class DetailsController: UIViewController {
     }
     var expectedTravelTime: TimeInterval? {
         didSet {
+            expectedTravelTimeLabel.alpha = 1
             guard let time = expectedTravelTime?.toDisplayString() else { return }
             expectedTravelTimeLabel.text = "Est Travel Time: " + time
         }
@@ -118,6 +123,7 @@ class DetailsController: UIViewController {
     
     let expectedTravelTimeLabel: UILabel = {
         let label = InsetsLabel(withInsets: 6, 8, 6, 8)
+        label.alpha = 0
         label.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.85) // 85%
         label.textColor = .white
         label.textAlignment = .center
@@ -233,10 +239,6 @@ class DetailsController: UIViewController {
             self.expectedTravelTime = route.expectedTravelTime
             self.mapView.addOverlay(route.polyline, level: .aboveRoads)
             self.mapView.setVisibleMapRect(route.polyline.boundingMapRect, edgePadding: .init(top: 32, left: 32, bottom: 32, right: 32), animated: true)
-            
-            DispatchQueue.main.async {
-                self.mapViewModel.createAnnotation(on: self.mapView, business: self.business)
-            }
         }
     }
     
