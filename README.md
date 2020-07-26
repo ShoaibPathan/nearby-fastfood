@@ -27,4 +27,5 @@ Things to do:
 * show multiple routes with the option to select
 * add driving and walking instructions
 * fix details view bug that occassionally shows a cluster pin
+* add default image if no business image exists
 
