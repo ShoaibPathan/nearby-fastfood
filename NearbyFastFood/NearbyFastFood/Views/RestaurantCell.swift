@@ -30,6 +30,7 @@ class RestaurantCell: UITableViewCell {
     static var reuseIdentifier: String { String(describing: self) }
     static var nib: UINib { UINib(nibName: String(describing: self), bundle: nil) }
     
+    @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var restaurantIcon: UIImageView!
     @IBOutlet weak var restaurantNameLabel: UILabel!
     @IBOutlet weak var restaurantInfoLabel: UILabel!
@@ -108,13 +109,13 @@ class RestaurantCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+        selectionStyle = .none
+        selectedBackgroundView?.isHidden = true
+        containerView.backgroundColor = selected ? #colorLiteral(red: 0.8784313725, green: 0.8823529412, blue: 0.8862745098, alpha: 1) : .white
     }
     
 }

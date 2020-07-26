@@ -9,7 +9,7 @@
 import Foundation
 import CoreLocation
 
-protocol LocationServiceDelegate {
+protocol LocationServiceDelegate: class {
     func turnOnLocationServices()
     func didFailWithError(error: Error)
     func didUpdateLocation(location: CLLocation)
@@ -22,7 +22,7 @@ class LocationService: NSObject, CLLocationManagerDelegate {
     
     // MARK: - Variables and Properties
     
-    var delegate: LocationServiceDelegate?
+    weak var delegate: LocationServiceDelegate?
     var locationManager: CLLocationManager!
     private var lastLocation: CLLocation?
     public var defaultLocation = CLLocationCoordinate2D(latitude: 40.758896, longitude: -73.985130)

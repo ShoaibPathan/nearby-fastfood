@@ -85,6 +85,7 @@
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
+                <outlet property="containerView" destination="rob-J2-NJP" id="S9G-gQ-Ord"/>
                 <outlet property="restaurantIcon" destination="21u-1R-U64" id="9W5-aB-yS8"/>
                 <outlet property="restaurantInfoLabel" destination="kMg-Cf-Nbp" id="MvK-O6-XhI"/>
                 <outlet property="restaurantNameLabel" destination="aKb-97-kTe" id="6zZ-3m-hHj"/>
