@@ -19,8 +19,8 @@ class MapViewModel: NSObject {
         mapView.addAnnotation(annotation)
     }
     
-    func createLocation(business: Business) -> CLLocationCoordinate2D? {
-        guard let lat = business.coordinates?.latitude, let lon = business.coordinates?.longitude else { return nil }
+    func createLocation(business: Business) -> CLLocationCoordinate2D {
+        guard let lat = business.coordinates?.latitude, let lon = business.coordinates?.longitude else { return CLLocationCoordinate2D() }
         return CLLocationCoordinate2D(latitude: lat, longitude: lon)
     }
     
