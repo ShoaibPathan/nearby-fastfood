@@ -1,6 +1,6 @@
 # NearbyFastfood
 
-A restaurant app that finds fast food places nearby using the user's location. Built with MapKit, Yelp REST API and Alamofire. Written programatically.
+A restaurant app that finds fast food places nearby using the user's location. Built with MapKit, Yelp REST API and Alamofire. Written programmatically.
 
 # Project Status
 
