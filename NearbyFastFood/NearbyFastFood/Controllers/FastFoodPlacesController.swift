@@ -181,7 +181,7 @@ class FastFoodPlacesController: UIViewController {
 extension FastFoodPlacesController {
     private func fetchBusinesses(latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
         APIService.shared.fetchBusinesses(latitude: latitude, longitude: longitude, radius: LocationService.shared.regionInMeters, sortBy: sortByCriteria, categories: searchCategories) { (businesses) in
-            self.loadingView.removeFromSuperview()
+            self.loadingView.isHidden = true
             self.businesses = businesses
             self.addAnnotations()
             self.tableView.reloadData()
