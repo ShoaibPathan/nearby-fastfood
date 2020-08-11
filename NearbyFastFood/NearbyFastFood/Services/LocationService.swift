@@ -81,6 +81,7 @@ class LocationService: NSObject, CLLocationManagerDelegate {
         guard let location = locations.last else { return }
         self.lastLocation = location
         updateLocation(currentLocation: location)
+        print("DID UPDATE LOCATIONS")
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
